@@ -7,27 +7,31 @@ import Popular from "@/components/container/home/Popular";
 import Mostview from "@/components/container/home/Mostview";
 import Travel from "@/components/container/home/Travel";
 import FixNavbar from "@/components/container/navbar/FixNavbar";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { callBackendApi, getDomain } from "@/lib/myFun";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export default function Home() {
+export default function Home({ logo }) {
+  console.log(logo);
   return (
     <div>
       <FixNavbar />
-      <Navbar/>
+      <Navbar logo={logo} />
       <Banner />
       <Latest />
       <Mostview />
       <Popular />
-      <Travel/>
+      <Travel />
       <Footer />
     </div>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const domain = getDomain(req?.headers?.host);
+  const logo = await callBackendApi({ domain, tag: "logo" });
+
+  return {
+    props: {
+      logo: logo?.data?.[0]?.value || null,
+    },
+  };
 }

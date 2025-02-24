@@ -194,7 +194,7 @@ const Categories = () => {
 /* ------------------------------------------------------------
    Navbar Component
 -------------------------------------------------------------*/
-export default function Navbar() {
+export default function Navbar({ logo }) {
   const liClasses =
     "py-2 text-xs text-primary hover:text-text px-3 font-hanken uppercase font-thin";
 
@@ -278,7 +278,8 @@ export default function Navbar() {
                 href="/"
                 className="text-primary text-[16px] tracking-[4px] font-ivyMedium font-thin uppercase"
               >
-                ISABELLE ROCHE
+                {/* Dynamic Logo */}
+                {logo}
               </Link>
             </div>
 
@@ -337,7 +338,7 @@ export default function Navbar() {
                     transition-all
                     duration-500
                     placeholder:text-primary/50
-                    ${isSearchOpen ? 'w-[200px] px-4 py-2' : 'w-0 px-0 py-2'}
+                    ${isSearchOpen ? "w-[200px] px-4 py-2" : "w-0 px-0 py-2"}
                   `}
                   onBlur={handleSearchBlur}
                 />
@@ -349,17 +350,17 @@ export default function Navbar() {
                     transition-all
                     duration-300
                     hover:text-text
-                    ${isSearchOpen ? '-ml-8' : 'ml-0'}
+                    ${isSearchOpen ? "-ml-8" : "ml-0"}
                   `}
                 >
-                  <Search 
+                  <Search
                     className={`
                       w-4 
                       h-4 
                       transition-transform 
                       duration-300
-                      ${isSearchOpen ? 'rotate-90' : 'rotate-0'}
-                    `} 
+                      ${isSearchOpen ? "rotate-90" : "rotate-0"}
+                    `}
                     strokeWidth={1.5}
                   />
                 </button>
