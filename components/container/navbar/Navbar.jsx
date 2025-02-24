@@ -7,6 +7,7 @@ import {
   ChevronUp,
   X,
 } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
@@ -158,10 +159,9 @@ const ImageCard = ({ item }) => (
 );
 
 /* ------------------------------------------------------------
-   TabContent Component (Query + Slice)
+   TabContent Component
 -------------------------------------------------------------*/
 const TabContent = ({ activeTab }) => {
-  // Filter current category & take only 3 articles
   const filteredData = data
     .filter((item) => item.category === activeTab)
     .slice(0, 3);
@@ -178,12 +178,10 @@ const TabContent = ({ activeTab }) => {
 };
 
 /* ------------------------------------------------------------
-   Main Categories (Dropdown) Component
+   Main Categories Component
 -------------------------------------------------------------*/
 const Categories = () => {
-  const [activeTab, setActiveTab] = useState(
-    uniqueCategories[0] || "inspiration"
-  );
+  const [activeTab, setActiveTab] = useState(uniqueCategories[0]);
 
   return (
     <div className="w-full mt-8 bg-secondary flex">
@@ -243,7 +241,14 @@ export default function Navbar() {
   };
 
   const handleSearchBlur = () => {
-    setIsSearchOpen(false);
+    if (!inputRef.current?.value) {
+      setIsSearchOpen(false);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Handle search submission
   };
 
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -261,7 +266,7 @@ export default function Navbar() {
         <div className="py-4 md:py-[10px] sm:px-5">
           <div className="flex justify-between items-center mx-auto text-black px-5">
             {/* Left Side: Mobile Menu & Branding */}
-            <ul className="flex justify-between items-center gap-6 text-sm font-semibold">
+            <div className="flex justify-between items-center gap-6 text-sm font-semibold">
               <button
                 onClick={() => setIsSideNavOpen(true)}
                 className="text-black"
@@ -275,10 +280,10 @@ export default function Navbar() {
               >
                 ISABELLE ROCHE
               </Link>
-            </ul>
+            </div>
 
             {/* Center Menu (Desktop) */}
-            <ul className="hidden md:flex justify-between items-center text-md font-semibold">
+            <div className="hidden md:flex justify-between items-center text-md font-semibold">
               <Link href="/" className={liClasses}>
                 Home
               </Link>
@@ -291,44 +296,81 @@ export default function Navbar() {
               <div
                 onMouseEnter={() => setIsDropdownOpen(true)}
                 onMouseLeave={() => setIsDropdownOpen(false)}
-                className="py-4 relative"
+                className="py-4"
               >
-                <div className="group py-2 bg-white text-primary hover:text-text hover:bg-white px-3 transition-all duration-500 flex items-center gap-1 text-xs font-hanken font-thin uppercase cursor-pointer">
-                  Categories
-                  <ChevronUp className="hidden group-hover:block h-3 w-3" />
-                  <ChevronDown className="group-hover:hidden h-3 w-3" />
-                </div>
-                {/* Dropdown Menu */}
-                <div
-                  className={`absolute top-14 left-[10%] bg-secondary w-[80%] text-black h-[300px] z-10 shadow-2xl transition-all duration-300 ${
-                    isDropdownOpen
-                      ? "opacity-100 visible translate-y-0"
-                      : "opacity-0 invisible -translate-y-2"
-                  }`}
-                  onMouseEnter={() => setIsDropdownOpen(true)}
-                  onMouseLeave={() => setIsDropdownOpen(false)}
-                >
-                  <Categories />
+                <div className="group py-2 bg-transparent px-3">
+                  <div className="flex text-xs items-center gap-1 font-hanken font-thin uppercase group hover:cursor-pointer">
+                    Categories
+                    <ChevronUp className="hidden group-hover:block h-3 w-3" />
+                    <ChevronDown className="group-hover:hidden h-3 w-3" />
+                  </div>
+                  <div
+                    className={`absolute top-14 left-[10%] bg-secondary w-[80%] text-black h-[300px] z-10 shadow-2xl transition-all duration-300 ${
+                      isDropdownOpen
+                        ? "opacity-100 visible translate-y-0"
+                        : "opacity-0 invisible translate-y-[-10px]"
+                    }`}
+                    onMouseEnter={() => setIsDropdownOpen(true)}
+                    onMouseLeave={() => setIsDropdownOpen(false)}
+                  >
+                    <Categories />
+                  </div>
                 </div>
               </div>
-            </ul>
+            </div>
 
             {/* Right Side: Search Icon */}
-            <div className="relative cursor-pointer p-2">
-              <div onClick={handleSearchToggle} className="inline-block">
-                <Search className="text-primary" />
-              </div>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Search"
-                className={`absolute right-0 top-0 bg-white border rounded-none px-2 py-1 transition-all duration-300 ${
-                  isSearchOpen
-                    ? "max-w-40 opacity-100"
-                    : "max-w-0 opacity-0 px-0 py-0"
-                }`}
-                onBlur={handleSearchBlur}
-              />
+            <div className="relative">
+              <form onSubmit={handleSearchSubmit} className="flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Type to search..."
+                  className={`
+                    bg-transparent
+                    border-b
+                    border-primary/20
+                    focus:border-primary
+                    outline-none
+                    text-sm
+                    font-hanken
+                    transition-all
+                    duration-500
+                    placeholder:text-primary/50
+                    ${isSearchOpen ? 'w-[200px] px-4 py-2' : 'w-0 px-0 py-2'}
+                  `}
+                  onBlur={handleSearchBlur}
+                />
+                <button
+                  type="button"
+                  onClick={handleSearchToggle}
+                  className={`
+                    p-2
+                    transition-all
+                    duration-300
+                    hover:text-text
+                    ${isSearchOpen ? '-ml-8' : 'ml-0'}
+                  `}
+                >
+                  <Search 
+                    className={`
+                      w-4 
+                      h-4 
+                      transition-transform 
+                      duration-300
+                      ${isSearchOpen ? 'rotate-90' : 'rotate-0'}
+                    `} 
+                    strokeWidth={1.5}
+                  />
+                </button>
+              </form>
+
+              {/* Search Results Dropdown - Add if needed */}
+              {isSearchOpen && (
+                <div className="absolute top-full right-0 mt-2 w-[300px] bg-white shadow-lg rounded-md overflow-hidden opacity-0 transition-opacity duration-300">
+                  {/* Add search results here if needed */}
+                </div>
+              )}
             </div>
           </div>
         </div>

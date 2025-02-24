@@ -134,6 +134,26 @@ export default function FixNavbar({ text }) {
       link: "/categories/personal",
     },
   ];
+
+  // Search states
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen(true);
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
+  const handleSearchBlur = () => {
+    if (!inputRef.current?.value) {
+      setIsSearchOpen(false);
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    // Handle search submission
+  };
+
   return (
     <>
       <Fullcontainer
@@ -192,23 +212,59 @@ export default function FixNavbar({ text }) {
               </div>
             </ul>
 
-            <div className="relative  cursor-pointer p-2">
-              <div onClick={handleToggle} className="inline-block">
-                <Search className={`${text}`}/>
-              </div>
+            <div className="relative">
+              <form onSubmit={handleSearchSubmit} className="flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Type to search..."
+                  className={`
+                    bg-transparent
+                    border-b
+                    border-white/20
+                    focus:border-white
+                    outline-none
+                    text-sm
+                    text-white
+                    font-hanken
+                    transition-all
+                    duration-500
+                    placeholder:text-white/50
+                    ${isSearchOpen ? 'w-[200px] px-4 py-2' : 'w-0 px-0 py-2'}
+                  `}
+                  onBlur={handleSearchBlur}
+                />
+                <button
+                  type="button"
+                  onClick={handleSearchToggle}
+                  className={`
+                    p-2
+                    transition-all
+                    duration-300
+                    text-white
+                    hover:text-text
+                    ${isSearchOpen ? '-ml-8' : 'ml-0'}
+                  `}
+                >
+                  <Search 
+                    className={`
+                      w-4 
+                      h-4 
+                      transition-transform 
+                      duration-300
+                      ${isSearchOpen ? 'rotate-90' : 'rotate-0'}
+                    `} 
+                    strokeWidth={1.5}
+                  />
+                </button>
+              </form>
 
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Search"
-                className={`absolute right-0 top-0  text-black bg-white border rounded-none  px-2 py-1 transition-all duration-300
-                 ${
-                 isOpen
-                 ? "max-w-40 opacity-100 px-2 py-1"
-                 : "max-w-0 opacity-0 px-0 py-0"
-                 }`}
-                onBlur={handleBlur}
-              />
+              {/* Search Results Dropdown - Add if needed */}
+              {isSearchOpen && (
+                <div className="absolute top-full right-0 mt-2 w-[300px] bg-white shadow-lg rounded-md overflow-hidden opacity-0 transition-opacity duration-300">
+                  {/* Add search results here if needed */}
+                </div>
+              )}
             </div>
           </div>
         </div>
