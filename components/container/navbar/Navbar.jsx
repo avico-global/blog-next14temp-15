@@ -117,7 +117,7 @@ const Tabs = ({ activeTab, setActiveTab }) => (
   <div className="flex flex-col text-xs border-r border-text/20 px-6 mr-5 w-[230px]">
     {uniqueCategories.map((tab, index) => (
       <Link
-        href={`/${tab}`}
+        href="#"
         key={index}
         onMouseEnter={() => setActiveTab(tab)}
         className={`text-start py-4 border-b border-text/20 text-xs px-3 font-hanken uppercase font-thin transition-all duration-300 ${
@@ -135,7 +135,7 @@ const Tabs = ({ activeTab, setActiveTab }) => (
 -------------------------------------------------------------*/
 const ImageCard = ({ item }) => (
   <Link
-    href={`/${item.category}/${item.title.replace(/\s+/g, "-").toLowerCase()}`}
+    href="#"
     className="flex flex-col items-center transition-all duration-500"
   >
     <div className="aspect-[4/3] flex items-center justify-center overflow-hidden">
@@ -194,7 +194,21 @@ const Categories = () => {
 /* ------------------------------------------------------------
    Navbar Component
 -------------------------------------------------------------*/
-export default function Navbar({ logo }) {
+export default function Navbar({ 
+  logo,
+  category,
+  staticPages,
+  isActive,
+  imagePath,
+  openSearch,
+  searchQuery,
+  searchContainerRef,
+  handleSearchChange,
+  // handleSearchToggle,
+  toggleSidebar,
+  filteredBlogs,
+  categories,
+}) {
   const liClasses =
     "py-2 text-xs text-primary hover:text-text px-3 font-hanken uppercase font-thin";
 
@@ -207,28 +221,21 @@ export default function Navbar({ logo }) {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      // Mobile: Always visible
-      if (window.innerWidth < 768) {
+      
+      if (currentScrollY > 0) {
+        // After scrolling - show white background navbar
         setShowNavbar(true);
-        return;
-      }
-      // On desktop: visible if not at top
-      if (currentScrollY === 0) {
-        setShowNavbar(false);
       } else {
-        setShowNavbar(true);
+        // At top - show transparent navbar
+        setShowNavbar(false);
       }
     };
-    // Initial state: Hidden on desktop, visible on mobile
-    setShowNavbar(window.innerWidth < 768);
+
+    // Initial check
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Search states
@@ -257,41 +264,57 @@ export default function Navbar({ logo }) {
     <>
       {/* Top Navbar */}
       <Fullcontainer
-        className={`fixed top-0 left-0 w-full bg-white text-black shadow-lg transition-all duration-[600ms] z-50 ${
-          showNavbar
-            ? "opacity-100 translate-y-0"
-            : "md:opacity-0 md:-translate-y-full"
+        className={`fixed top-0 left-0 w-full transition-all duration-500 z-50 ${
+          showNavbar 
+            ? "bg-white text-black shadow-lg" 
+            : "bg-transparent text-white"
         }`}
       >
         <div className="py-4 md:py-[10px] sm:px-5">
-          <div className="flex justify-between items-center mx-auto text-black px-5">
+          <div className="flex justify-between items-center mx-auto px-5">
             {/* Left Side: Mobile Menu & Branding */}
             <div className="flex justify-between items-center gap-6 text-sm font-semibold">
               <button
                 onClick={() => setIsSideNavOpen(true)}
-                className="text-black"
+                className="transition-colors duration-300"
                 aria-label="Open side navigation"
               >
                 <MenuIcon className="w-5 h-5" strokeWidth={1} />
               </button>
               <Link
                 href="/"
-                className="text-primary text-[16px] tracking-[4px] font-ivyMedium font-thin uppercase"
+                className={`text-[16px] tracking-[4px] font-ivyMedium font-thin uppercase transition-colors duration-300 ${
+                  showNavbar ? "text-primary" : "text-white"
+                }`}
               >
-                {/* Dynamic Logo */}
-                {logo}
+                {logo?.logoText}
               </Link>
             </div>
 
             {/* Center Menu (Desktop) */}
             <div className="hidden md:flex justify-between items-center text-md font-semibold">
-              <Link href="/" className={liClasses}>
+              <Link 
+                href="/" 
+                className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
+                  showNavbar ? "text-primary" : "text-white"
+                }`}
+              >
                 Home
               </Link>
-              <Link href="/blog" className={liClasses}>
+              <Link 
+                href="/blog" 
+                className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
+                  showNavbar ? "text-primary" : "text-white"
+                }`}
+              >
                 Blog
               </Link>
-              <Link href="/contact" className={liClasses}>
+              <Link 
+                href="/contact" 
+                className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
+                  showNavbar ? "text-primary" : "text-white"
+                }`}
+              >
                 Contact
               </Link>
               <div
@@ -299,8 +322,10 @@ export default function Navbar({ logo }) {
                 onMouseLeave={() => setIsDropdownOpen(false)}
                 className="py-4"
               >
-                <div className="group py-2 bg-transparent px-3">
-                  <div className="flex text-xs items-center gap-1 font-hanken font-thin uppercase group hover:cursor-pointer">
+                <div className="group py-2 px-3">
+                  <div className={`flex text-xs items-center gap-1 font-hanken font-thin uppercase group hover:cursor-pointer transition-colors duration-300 ${
+                    showNavbar ? "text-primary" : "text-white"
+                  }`}>
                     Categories
                     <ChevronUp className="hidden group-hover:block h-3 w-3" />
                     <ChevronDown className="group-hover:hidden h-3 w-3" />
@@ -320,7 +345,7 @@ export default function Navbar({ logo }) {
               </div>
             </div>
 
-            {/* Right Side: Search Icon */}
+            {/* Search Component */}
             <div className="relative">
               <form onSubmit={handleSearchSubmit} className="flex items-center">
                 <input
@@ -330,15 +355,16 @@ export default function Navbar({ logo }) {
                   className={`
                     bg-transparent
                     border-b
-                    border-primary/20
-                    focus:border-primary
                     outline-none
                     text-sm
                     font-hanken
                     transition-all
                     duration-500
-                    placeholder:text-primary/50
-                    ${isSearchOpen ? "w-[200px] px-4 py-2" : "w-0 px-0 py-2"}
+                    ${showNavbar 
+                      ? "border-primary/20 focus:border-primary placeholder:text-primary/50 text-primary" 
+                      : "border-white/20 focus:border-white placeholder:text-white/50 text-white"
+                    }
+                    ${isSearchOpen ? 'w-[200px] px-4 py-2' : 'w-0 px-0 py-2'}
                   `}
                   onBlur={handleSearchBlur}
                 />
@@ -349,29 +375,22 @@ export default function Navbar({ logo }) {
                     p-2
                     transition-all
                     duration-300
-                    hover:text-text
-                    ${isSearchOpen ? "-ml-8" : "ml-0"}
+                    ${showNavbar ? "text-primary hover:text-text" : "text-white hover:text-gray-200"}
+                    ${isSearchOpen ? '-ml-8' : 'ml-0'}
                   `}
                 >
-                  <Search
+                  <Search 
                     className={`
                       w-4 
                       h-4 
                       transition-transform 
                       duration-300
-                      ${isSearchOpen ? "rotate-90" : "rotate-0"}
-                    `}
+                      ${isSearchOpen ? 'rotate-90' : 'rotate-0'}
+                    `} 
                     strokeWidth={1.5}
                   />
                 </button>
               </form>
-
-              {/* Search Results Dropdown - Add if needed */}
-              {isSearchOpen && (
-                <div className="absolute top-full right-0 mt-2 w-[300px] bg-white shadow-lg rounded-md overflow-hidden opacity-0 transition-opacity duration-300">
-                  {/* Add search results here if needed */}
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -463,7 +482,7 @@ export default function Navbar({ logo }) {
                           className="block border-b border-white/20 py-2 hover:bg-white/10 transition-colors"
                         >
                           {/* Using a normal <a> to remove Next.js link hydration */}
-                          <a href={category.link}>{category.name}</a>
+                          <Link href="#">{category.name}</Link>
                         </li>
                       ))}
                     </ul>

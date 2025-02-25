@@ -3,8 +3,10 @@ import Container from "@/components/common/Container";
 import Link from "next/link";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import { sanitizeUrl} from "@/lib/myFun";
 
-export default function Footer() {
+export default function Footer({ logo, categories }) {
+ 
   const pages = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
@@ -13,18 +15,14 @@ export default function Footer() {
     { name: "Blog", href: "/blog" },
   ];
 
-  const categories = [
-    { name: "Category 1", href: "/category1" },
-    { name: "Category 2", href: "/category2" },
-    { name: "Category 3", href: "/category3" },
-  ];
+ 
 
   return (
     <footer className="bg-[#1C1C1C]  text-white py-20 ">
       <Container className="md:px-24 py-5 max-w-[1100px]  ">
         <div className="md:hidden  flex flex-col items-center col-span-2  justify-center   px-[10px] ">
           <h2 className="text-5xl text-center font-ivyMedium uppercase ">
-            Isabelle Roche
+            {logo?.logoText}
           </h2>
           <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
             I’m based in Los Angeles, CA but available for travel worldwide.
@@ -39,11 +37,11 @@ export default function Footer() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 ">
           <ul className=" flex-col flex items-start justify-center gap-3 ">
-            {pages.map((page) => (
-              <li key={page.name}>
+            {pages.map((page,index) => (
+              <li key={index}>
                 <Link
                   className="text-sm text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
-                  href={page.href}
+                  href="#"
                 >
                   {page.name}
                 </Link>
@@ -68,13 +66,17 @@ export default function Footer() {
 
           <div className=" flex-col flex items-start md:items-end ">
             <ul className="flex flex-col w-fit gap-3 ">
-              {categories.map((category) => (
-                <li key={category.name}>
+              {categories.map((item,index) => (
+                <li key={index}>
                   <Link
                     className="text-sm  text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
-                    href={category.href}
+                    key={index}
+                    title={item?.title || "Article Link"}
+                    href={`/${sanitizeUrl(item.title)}`}
                   >
-                    {category.name}
+
+                  
+                    {item?.title}
                   </Link>
                 </li>
               ))}
@@ -147,7 +149,7 @@ export function Card() {
         >
           {/* Image container */}
           <Link
-            href={item.title}
+            href="#"
             className="block w-full aspect-square overflow-hidden"
           >
             {/* Image */}
