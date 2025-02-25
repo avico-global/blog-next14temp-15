@@ -6,7 +6,6 @@ import image2 from "../public/images/codesupply3.3.webp"
 import image3 from "../public/images/category1.webp"
 import Container from '../components/common/Container'
 import Navbar from '../components/container/navbar/Navbar'
-import FixNavbar from '../components/container/navbar/FixNavbar'
 import Footer from '../components/container/footer/Footer'
 export default function Blog() {
     const blog = [
@@ -35,8 +34,7 @@ export default function Blog() {
 
     return (
         <>
-            <Navbar />
-            <FixNavbar text={"text-black"} />
+            {/* <Navbar /> */}
             <Container className="mt-20 py-10 px-5 md:px-15 lg:px-24">
                 <div className="relative w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-20">
                     {/* Left Content */}
@@ -92,7 +90,7 @@ export default function Blog() {
                     </div>
                 </div>
             </Container >
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }

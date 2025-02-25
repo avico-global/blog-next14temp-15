@@ -2,13 +2,11 @@ import React from 'react'
 import Navbar from '@/components/container/navbar/Navbar'
 import Container from '@/components/common/Container'
 import Footer from '@/components/container/footer/Footer'
-import FixNavbar from '@/components/container/navbar/FixNavbar'
 import Form from '@/components/container/Form'
 export default function contact() {
     return (
         <div>
-            <FixNavbar text='text-black' />
-            <Navbar />
+            {/* <Navbar /> */}
             <Container className='pt-40 pb-20 px-5 lg:max-w-[830px]'>
                 <div className='flex flex-col items-center justify-center'>
                     <h2 className='text-hanken text-7xl font-ivyMedium'>
@@ -20,7 +18,7 @@ export default function contact() {
             <Container className='pb-40 px-5 lg:max-w-[730px]'>
                 <Form />
             </Container>
-            <Footer />
+            {/* <Footer /> */}
 
         </div>
     )
