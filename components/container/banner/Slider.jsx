@@ -4,20 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight,} from "lucide-react";
 
-const posts = [
-  { id: 1, title: "Maximizing Success: The Role of Business Coaching", image: "/images/section1.1.webp", date: "2024-01-01", category: "Business" },
-  { id: 2, title: "5 Key Strategies from Top Business Consultants", image: "/images/section3.2.png", date: "2024-02-01", category: "business-consultants"    },
-  { id: 3, title: "Strategies from Strategies from Top Business ", image: "/images/section1.2.jpg", date: "2024-03-01", category: "Travel" },
-  { id: 4, title: "Maximizing Success: The Role of Business Coaching", image: "/images/section2.1.webp", date: "2024-04-01", category: "Life Style" },
-  { id: 5, title: "Transforming Challenges into Opportunities with Coaching", image: "/images/section3.2.png", date: "2024-05-01", category: "business-coaching" },
-  { id: 6, title: "5 Key Strategies from Top Business Consultants", image: "/images/section3.3.webp", date: "2024-06-01",category: "consultant" },
-  { id: 7, title: "Maximizing Strategies from  of Business Coaching", image: "/images/section4.1.webp", date: "2024-07-01", category: "Travel" },
-  { id: 8, title: "Transforming Challenges into Opportunities with Coaching", image: "/images/section4.2.webp", date: "2024-08-01", category: "business-coaching" },
-  { id: 9, title: "Maximizing Success: The Role of Business Coaching", image: "/images/section4.3.webp", date: "2024-09-01", category: "Life Style" },
-  { id: 10, title: "5 Key Strategies from Top Business Consultants", image: "/images/section2.1.webp", date: "2024-10-01" ,category: "business-consultants"},
-];
 
-export default function Slider() {
+
+export default function Slider({blog_list,imagePath}) {
+  const posts = blog_list.filter((item)=> item.editorsChoice)
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesToShow, setSlidesToShow] = useState(1);
   const [hovering, setHovering] = useState(false);
@@ -134,7 +124,7 @@ export default function Slider() {
               <div key={post.id} className={`flex-shrink-0 flex px-3 flex-row w-full sm:w-1/2 lg:w-1/3`}>
                 <Link href={`/${post.category}/${post.title}`} className="text-center">
                   <Image
-                    src={post.image}
+                    src={`${imagePath}/${post.image}`}
                     alt={post.title}
                     width={1000}
                     height={1000}

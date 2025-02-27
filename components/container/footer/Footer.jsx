@@ -3,8 +3,9 @@ import Container from "@/components/common/Container";
 import Link from "next/link";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import Image from "next/image";
+import { sanitizeUrl} from "@/lib/myFun";
 
-export default function Footer() {
+export default function Footer({ logo, categories,blog_list,imagePath }) {
   const pages = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
@@ -13,37 +14,33 @@ export default function Footer() {
     { name: "Blog", href: "/blog" },
   ];
 
-  const categories = [
-    { name: "Category 1", href: "/category1" },
-    { name: "Category 2", href: "/category2" },
-    { name: "Category 3", href: "/category3" },
-  ];
+ 
 
   return (
     <footer className="bg-[#1C1C1C]  text-white py-20 ">
       <Container className="md:px-24 py-5 max-w-[1100px]  ">
-        <div className="md:hidden  flex flex-col items-center col-span-2  justify-center   px-[10px] ">
+        <div className="md:hidden pb-6 md:pb-0  items-start flex flex-col md:items-center col-span-2  justify-center   px-[10px] ">
           <h2 className="text-5xl text-center font-ivyMedium uppercase ">
-            Isabelle Roche
+            {logo?.logoText}
           </h2>
-          <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
+          <p className="py-2 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
             I’m based in Los Angeles, CA but available for travel worldwide.
           </p>
-          <p className="py-1 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
+          <p className="py-1 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
             E. contact@isabelleroche.com
           </p>
-          <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
+          <p className="py-2 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
             T. 555 – 352 – 6521
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 ">
           <ul className=" flex-col flex items-start justify-center gap-3 ">
-            {pages.map((page) => (
-              <li key={page.name}>
+            {pages.map((page,index) => (
+              <li key={index}>
                 <Link
                   className="text-sm text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
-                  href={page.href}
+                  href="#"
                 >
                   {page.name}
                 </Link>
@@ -52,9 +49,10 @@ export default function Footer() {
           </ul>
 
           <div className="hidden md:flex flex-col items-center col-span-2  justify-center px-[10px] ">
-            <h2 className="text-5xl pb-6 text-center lg:px-24 font-ivyMedium uppercase ">
-              Isabelle Roche
-            </h2>
+          <h2 className="text-5xl  text-center font-ivyMedium uppercase ">
+            {logo?.logoText} 
+          </h2>
+           
             <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
               I’m based in Los Angeles, CA but available for travel worldwide.
             </p>
@@ -68,13 +66,16 @@ export default function Footer() {
 
           <div className=" flex-col flex items-start md:items-end ">
             <ul className="flex flex-col w-fit gap-3 ">
-              {categories.map((category) => (
-                <li key={category.name}>
+              categories
+              {categories.map((item,index) => (
+                <li key={index}>
                   <Link
                     className="text-sm  text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
-                    href={category.href}
+                    key={index}
+                    title={item?.title || "Article Link"}
+                    href={`/${sanitizeUrl(item.title)}`}
                   >
-                    {category.name}
+                    {item?.title}
                   </Link>
                 </li>
               ))}
@@ -89,7 +90,7 @@ export default function Footer() {
           Popular Posts
         </h2>
         <h3 className="text-center text-xl  pb-8  font-ivy  ">Follow Me!</h3>
-        <Card className="" />
+        <Card blog_list={blog_list} imagePath={imagePath} />
       </Container>
 
       {/* contact us section */}
@@ -101,19 +102,14 @@ export default function Footer() {
           Receive updates on special promotions, exclusive events and
           announcements.
         </p>
-        <div className="py-7">
-          <div className="flex flex-row items-center justify-center gap-2 h-16 ">
-            <input
-              type="text"
-              placeholder="First Name "
-              className="  focus:outline-none border bg-transparent border-white/15 rounded-none px-4  h-full"
-            />
+        <div className="  py-7">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:h-16  ">
             <input
               type="text"
               placeholder="Email Address"
-              className="  focus:outline-none border bg-transparent border-white/15 rounded-none px-4  h-full"
+              className="  focus:outline-none border bg-transparent border-white/15 rounded-none px-4 py-4 md:py-0  h-full"
             />
-            <button className="bg-[#85705F] text-white px-8 hover:bg-black   h-full ">
+            <button className="bg-[#85705F] text-white px-8 hover:bg-black py-4 md:py-0  h-full ">
               sign up
             </button>
           </div> 
@@ -127,18 +123,15 @@ export default function Footer() {
   );
 }
 
-export function Card() {
-  const data = [
-    { image: "/images/section1.1.webp", title: "title1" },
-    { image: "/images/section1.1.webp", title: "title1" },
-    { image: "/images/section1.1.webp", title: "title1" },
-    { image: "/images/section1.1.webp", title: "title1" },
-    { image: "/images/section1.1.webp", title: "title1" }, // Last one
-  ];
+export function Card({blog_list,imagePath}) {
+
+  const data = blog_list?.slice(0,5);
+console.log("blog_data in footer",blog_list?.map(item=>item?.image))
+console.log("imagePath in footer",imagePath)
 
   return (
     <div className="grid grid-cols-2 gap-[2px] md:flex md:justify-center md:gap-3">
-      {data.map((item, index) => (
+      {data?.map((item, index) => (
         <div
           key={index}
           className={`group relative w-full ${
@@ -147,12 +140,12 @@ export function Card() {
         >
           {/* Image container */}
           <Link
-            href={item.title}
+            href="#"
             className="block w-full aspect-square overflow-hidden"
           >
             {/* Image */}
             <Image
-              src={item.image}
+              src={`${imagePath}/${item?.image}`}
               alt={item.title}
               width={1000}
               height={1000}

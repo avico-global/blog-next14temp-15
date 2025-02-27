@@ -2,33 +2,47 @@ import React from "react";
 import Container from "@/components/common/Container";
 import Card from "./Card";
 import Image from "next/image";
-export default function 
+import Link from "next/link";
+import { ArrowRightIcon } from "lucide-react";
+import { sanitizeUrl } from "@/lib/myFun";
+export default function Popular({  blog_list, imagePath }) {
+  const data = blog_list.filter((item) => item.isPopular).slice(0, 3);
+  const popularBlogs = blog_list.filter((item) => item.isPopular).slice(0, 3);
+  const test = data.slice(0,1);
 
-popular() {
-  const data = [
-    {
-      image: "/images/section2.1.webp",
-      title: "Business Strategy Development",
-    },
-    {
-      image: "/images/section3.2.png",
-      title: "Leadership and Communication Training",
-    },
-    {
-      image: "/images/section3.3.webp",
-      title: "Work-Life Balance Coaching",
-    },
-  ];
+
   return (
     <div className="bg-primary">
       <Container className="lg:px-10 px-4 flex flex-col items-center justify-center  py-[100px]">
         <h1 className="text-center  text-white text-[68px] font-ivyMedium leading-[62px]">
-          THE SERVICES
+         The Most Popular
         </h1>
 
         <div className="grid w-full  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[50px] pt-[90px] px-12">
-          {data.map((item, index) => (
-            <Card data={item} index={index + 1} />
+         {data?.map((item, index) => (
+            <div key={item.id || index}>
+              <div className="relative">
+                <Image
+                  src={`${imagePath}/${item.image}`}
+                  alt={item.title}
+                  width={1000}
+                  height={1000}
+                />
+                <div className="absolute bottom-[-18px] text-center w-full bg-transparent text-white text-[105px] font-light  font-ivyMedium uppercase leading-[35px]">
+                  0{index}
+                </div>
+              </div>
+
+              <h3 className="text-white text-[23px] leading-[27px] text-center border-b-[1px] border-gray-400 pb-7 pt-14 font-thin font-ivyMedium uppercase ">
+                {item.title}
+              </h3>
+              <Link href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`}>
+                <button className="bg-transparent hover:bg-white hover:text-black transition-all duration-300 text-white text-[16px] font-hanken uppercase px-7 w-full py-[15px] flex flex-row justify-center items-center text-center gap-5">
+                  Read More
+                  <ArrowRightIcon className="w-4 h-4" />
+                </button>
+              </Link>
+            </div>
           ))}
         </div>
       </Container>

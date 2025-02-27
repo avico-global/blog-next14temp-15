@@ -11,7 +11,7 @@ export default function Card2({ data }) {
         {data.title}
       </h2>
       <p className="text-[16px]  leading-[25px]  text-center pt-7 px-4 font-thin font-hanken ">
-        {data.description}
+        {data.tagline}
       </p>
     </Link>
   );
