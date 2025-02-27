@@ -1,8 +1,6 @@
 import Container from "@/components/common/Container";
 import React from "react";
 import Image from "next/image";
-import image from "../../../public/images/section1.1.webp";
-import image2 from "../../../public/images/section1.2.jpg";
 import Link from "next/link";
 import { sanitizeUrl } from "../../../lib/myFun";
 import { ArrowRightIcon } from "lucide-react";
@@ -10,9 +8,7 @@ import { ArrowRightIcon } from "lucide-react";
 export default function Latest({ blog_list = [], imagePath }) {
   const latestblog = blog_list.slice(0, 1);
   const latestblog2 = blog_list.slice(1, 2);
-  console.log("path name is ?", imagePath);
-  console.log("image name is ?", blog_list[0]?.image);
-  console.log("Full image url is ?", `${imagePath}/${blog_list[0]?.image}`);
+  
   return (
     <div className="bg-primary py-[110px]  text-white">
       <Container className=" grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-0  justify-between ">
@@ -46,11 +42,12 @@ export default function Latest({ blog_list = [], imagePath }) {
 
         {latestblog.map((blog, index) => (
           <Link
+          key={blog?.id || index}
             href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(
               blog?.title
             )}`}
           >
-            <div key={blog.id || index} className=" px-5  ">
+            <div  className=" px-5  ">
               <Image
                 src={
                   blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"

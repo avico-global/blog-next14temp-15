@@ -7,36 +7,27 @@ import image3 from "../public/images/category1.webp"
 import Container from '../components/common/Container'
 import Navbar from '../components/container/navbar/Navbar'
 import Footer from '../components/container/footer/Footer'
-export default function Blog() {
-    const blog = [
-        {
-            id: 1,
-            image: image,
-            category: "Travel",
-            date: "February 14, 2025",
-            title: "Celebrity Style Steals: Get the Look for Less",
-        },
-        {
-            id: 2,
-            image: image2,
-            category: "Travel",
-            date: "February 15, 2025",
-            title: "Celebrity Style Steals: Get the Look for Less",
-        },
-        {
-            id: 3,
-            image: image3,
-            category: "Travel",
-            date: "February 16, 2025",
-            title: "Celebrity Style Steals: Get the Look for Less",
-        },
-    ];
+
+import Link from 'next/link'
+import { callBackendApi, getDomain, getImagePath ,sanitizeUrl} from "@/lib/myFun";
+export default function Blog({
+    logo,
+    meta,
+    domain,
+    imagePath,
+    favicon,
+    categories,
+    banner,
+    blog_list,
+    about_me,
+  }) {
+    const blog = blog_list || [];
 
     return (
         <>
-            {/* <Navbar /> */}
+            <Navbar logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath}/>
             <Container className="mt-20 py-10 px-5 md:px-15 lg:px-24">
-                <div className="relative w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-20">
+                <div className="relative w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-20 ">
                     {/* Left Content */}
                     <div className="col-span-2">
                         {/* content */}
@@ -55,42 +46,73 @@ export default function Blog() {
                         </div>
 
                         {blog.map((item, index) => (
-                            <div key={index} className="flex flex-col gap-6 py-10">
+                            <Link href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`} key={index} className="flex flex-col gap-6 py-10">
                                 <Image
-                                    src={item.image}
+                                    src={`${imagePath}/${item.image}`}
                                     height={1300}
                                     width={1300}
                                     alt="#"
                                     quality={100}
                                     className="h-auto w-auto max-w-full max-h-full object-contain"
                                 />
-                                <div className="flex flex-col gap-6 py-10">
+                                <div className="flex flex-col gap-6 py-10 border-b border-gray-200">
                                     <h2 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
-                                        {item.category}
+                                        {item.article_category}
                                     </h2>
-                                    <p className="font-ivyMedium  text-[40px] text-black leading-10 font-thin ">
-                                        {item.title}
+                                    <p className="font-ivyMedium text-[30px]  md:text-[40px] text-black leading-10 font-thin ">
+                                        {item.title} 
                                     </p>
                                     <div className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
-                                        {item.date}
+                                        {item.published_at}
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
 
                     </div>
 
                     {/* Right Sidebar (Sticky) */}
-                    <div className="col-span-1 h-full">
-                        <div className="sticky top-20">
-                            <Rightbar
-
-                            />
+                    <div className="col-span-1 h-full ">
+                        <div className="sticky top-20 ">
+                            <Rightbar aboutMe={about_me} imagePath={imagePath} categories={categories} />
                         </div>
                     </div>
                 </div>
             </Container >
-            {/* <Footer /> */}
+            <Footer categories={categories} />
         </>
     )
 }
+
+export async function getServerSideProps({ req }) {
+    const domain = getDomain(req?.headers?.host);
+    const logo = await callBackendApi({ domain, tag: "logo" });
+    const project_id = logo?.data[0]?.project_id || null;
+  
+    let layoutPages = await callBackendApi({
+      domain,
+      tag: "layout",
+    });
+  
+    const meta = await callBackendApi({ domain, tag: "meta_home" });
+    const favicon = await callBackendApi({ domain, tag: "favicon" });
+    const imagePath = await getImagePath(project_id, domain);
+    const categories = await callBackendApi({ domain, tag: "categories" });
+    const about_me = await callBackendApi({ domain, tag: "about_me" });
+    const banner = await callBackendApi({ domain, tag: "banner" });
+    const blog_list = await callBackendApi({ domain, tag: "blog_list" });
+  
+    return {
+      props: {
+        logo: logo?.data?.[0]?.value || null,
+        meta: meta?.data[0]?.value || null,
+        domain,
+        imagePath,
+        about_me: about_me?.data[0]?.value || null,
+        categories: categories?.data[0]?.value || [],
+        favicon: favicon?.data?.[0]?.value || null,
+        banner: banner?.data[0] || null,
+        blog_list: blog_list?.data[0]?.value || [],
+      },
+    };
+  }

@@ -4,19 +4,18 @@ import Card from "./Card";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
+import { sanitizeUrl } from "@/lib/myFun";
 export default function Popular({  blog_list, imagePath }) {
   const data = blog_list.filter((item) => item.isPopular).slice(0, 3);
   const popularBlogs = blog_list.filter((item) => item.isPopular).slice(0, 3);
   const test = data.slice(0,1);
-  console.log("test", test)
-  console.log("popularBlogs", popularBlogs)
-  console.log("data", data)
+
 
   return (
     <div className="bg-primary">
       <Container className="lg:px-10 px-4 flex flex-col items-center justify-center  py-[100px]">
         <h1 className="text-center  text-white text-[68px] font-ivyMedium leading-[62px]">
-          THE SERVICES
+         The Most Popular
         </h1>
 
         <div className="grid w-full  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[50px] pt-[90px] px-12">
@@ -37,7 +36,7 @@ export default function Popular({  blog_list, imagePath }) {
               <h3 className="text-white text-[23px] leading-[27px] text-center border-b-[1px] border-gray-400 pb-7 pt-14 font-thin font-ivyMedium uppercase ">
                 {item.title}
               </h3>
-              <Link href={`/${item.category}/${item.title}`}>
+              <Link href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`}>
                 <button className="bg-transparent hover:bg-white hover:text-black transition-all duration-300 text-white text-[16px] font-hanken uppercase px-7 w-full py-[15px] flex flex-row justify-center items-center text-center gap-5">
                   Read More
                   <ArrowRightIcon className="w-4 h-4" />

@@ -5,25 +5,17 @@ import Link from "next/link";
 import image1 from "../../../../public/images/category1.webp";
 import image2 from "../../../../public/images/category3.webp";
 import image3 from "../../../../public/images/category4.webp";
+import MarkdownIt from "markdown-it";
+import {sanitizeUrl} from "@/lib/myFun";
+import { useRouter } from "next/router";
+export default function Rightbar({imagePath,categories,aboutMe}) {
+  const router = useRouter();
+  const {category} = router.query;
+  const markdon = new MarkdownIt();
+  const aboutMeData = markdon?.render(aboutMe?.value || " ");
 
-export default function Rightbar() {
-  const data = [
-    {
-      id: 1,
-      image: image1,
-      category: "Inspiration",
-    },
-    {
-      id: 2,
-      image: image3,
-      category: "Travel",
-    },
-    {
-      id: 3,
-      image: image2,
-      category: "Personal",
-    },
-  ];
+  const categoriesData = categories.filter((item) => item.category === category) || [];
+  console.log("categoriesData",categoriesData);
   return (
     <div className=" sticky top-0 ">
       {/* about me */}
@@ -58,12 +50,12 @@ export default function Rightbar() {
         Categories
         </h2>
         <div className="flex flex-col gap-6">
-          {data.map((item, index) => (
+          {categoriesData.map((item, index) => (
             <div key={index}>
-              <Link className="relative" href={`/${item.category}`}>
+              <Link className="relative" href={`/${sanitizeUrl(item?.title)}`}>
                 <div className="w-full overflow-hidden ">
                   <Image
-                    src={item.image}
+                    src={`${imagePath}/${item.image}` || ""}
                     height={1000}
                     width={1000}
                     alt="#"
@@ -71,7 +63,7 @@ export default function Rightbar() {
                   />
                 </div>
                 <p className="absolute top-[40%] left-5  text-white text-3xl font-ivy font-medium">
-                  {item.category}
+                  {item.title}
                 </p>
               </Link>
             </div>

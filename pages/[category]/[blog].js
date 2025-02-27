@@ -5,6 +5,7 @@ import Container from '../../components/common/Container'
 import Navbar from '../../components/container/navbar/Navbar'
 import Slider from '../../components/container/banner/Slider'
 import Footer from '../../components/container/footer/Footer'
+import MarkdownIt from "markdown-it";
 import {
     callBackendApi,
     getDomain,
@@ -16,7 +17,9 @@ import {
 export default function Blog(
    { contact_details,
     categories,
+    myblog,
     imagePath,
+    project_id,
     about_me,
     domain,
     logo,
@@ -26,17 +29,25 @@ export default function Blog(
     tag_list,
     nav_type,
     blog_list,
-    footer_type,
-}) {
-    return (
-       
+    footer_type}) {
+
+      const markdownIt = new MarkdownIt();
+  const content = markdownIt.render(
+    myblog?.value?.articleContent?.replaceAll(
+      `https://api.sitebuilderz.com/images/project_images/${project_id}/`,
+      imagePath
+    ) || ""
+  );
+
+  return (
         <>
-            <Navbar  logo={logo} categories={categories} />
+            <Navbar  logo={logo} categories={categories} imagePath={imagePath} blog_list={blog_list}/>
             <Container className="mt-20 px-5 lg:max-w-[1130px]">
                 <div className="flex flex-col gap-6 py-10">
                     <div className="flex flex-col gap-6 text-left  md:text-center py-10">
+
                         <h2 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
-                            Life Style
+                            {myblog.value.title}
                         </h2>
                         <p className="font-ivyMedium  text-[40px] text-black leading-10 font-thin ">
                             Celebrity Style Steals: Get the Look for Less
@@ -46,7 +57,7 @@ export default function Blog(
                         </div>
                     </div>
                     <Image
-                        src={image}
+                        src={`${imagePath}/${myblog.file_name}`}
                         height={1300}
                         width={1300}
                         alt="#"
@@ -59,16 +70,19 @@ export default function Blog(
                     <p>
                         Ever scrolled through your feed, spotting a celebrity rocking an outfit that screams “you,” only to discover it’s worth more than your monthly rent? We’ve all been there, sighing at the dream of replicating those luxe looks without breaking the bank. Well, dream no more! Our latest guide, “Celebrity Style Steals: Get the Look for Less,” is here to turn that sigh into a stylish strut.
                     </p>
+                    <h2> <div dangerouslySetInnerHTML={{ __html: content.slice(0, 180) }} /></h2>
                 </div>
                 <div className="flex items-center gap-7">
                     <div className="flex-1 border-t border-gray-100"></div>
                     <span className="text-md font-ivyMedium font-thin capitalize">You might also like</span>
                     <div className="flex-1 border-t border-gray-100"></div>
                 </div>
-                <Slider className="" />
+                <h2 >
+                   slider
+                </h2>
+                <Slider className="" blog_list={blog_list} imagePath={imagePath} />
             </Container>
-            <Footer categories={categories} />
-
+            <Footer categories={categories} logo={logo}/>
         </>
     )
 }

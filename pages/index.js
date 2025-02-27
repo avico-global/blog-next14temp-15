@@ -1,12 +1,11 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/container/navbar/Navbar";
 import Banner from "../components/container/banner/Banner";
 import Footer from "@/components/container/footer/Footer";
 import Latest from "@/components/container/home/Latest";
 import Popular from "@/components/container/home/Popular";
 import Mostview from "@/components/container/home/Mostview";
-import Travel from "@/components/container/home/Travel";
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import Travel from "@/components/container/home/Travel";
 import Head from "next/head";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 
@@ -23,6 +22,7 @@ export default function Home({
   blog_list,
 }) {
 
+   console.log("blog_list in index", blog_list)
   return (
     <div>
       <Head>
@@ -59,13 +59,12 @@ export default function Home({
           href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
       </Head>
-      {/* <FixNavbar logo={logo} categories={categories} />  */}
-      <Navbar logo={logo} categories={categories} />
+      <Navbar logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath} />
       <Banner data={banner?.value} image={`${imagePath}/${banner?.file_name}`} />
       <Latest blog_list={blog_list} imagePath={imagePath} />
       <Mostview blog_list={blog_list} imagePath={imagePath} />
       <Popular blog_list={blog_list} imagePath={imagePath} />
-      {/* <Travel blog_list={blog_list} imagePath={imagePath} /> */}
+      <Travel blog_list={blog_list} imagePath={imagePath} />  
       <Footer logo={logo} categories={categories} />
     </div>
   );
@@ -85,7 +84,6 @@ export async function getServerSideProps({ req }) {
   const favicon = await callBackendApi({ domain, tag: "favicon" });
   const imagePath = await getImagePath(project_id, domain);
   const categories = await callBackendApi({ domain, tag: "categories" });
-  console.log("categories is ?😒", categories?.data[0]?.value);
   const banner = await callBackendApi({ domain, tag: "banner" });
   const blog_list = await callBackendApi({ domain, tag: "blog_list" });
 

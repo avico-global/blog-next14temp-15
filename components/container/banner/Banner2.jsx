@@ -2,15 +2,22 @@ import React from "react";
 import Image from "next/image";
 import banner from "@/public/images/categorybanner.webp";
 import { useRouter } from "next/router";
-export default function Banner() {
+export default function Banner({imagePath, categories}) {
   const router = useRouter();
   const { category } = router.query;
+
+  const selectedCategory = categories?.find(
+    (cat) => cat.title.toLowerCase() === category?.replaceAll("-", " ").toLowerCase()
+  );
+
+  if (!selectedCategory) return null;
+
   return (
     <div className="relative w-full h-[50vh]">
       {/* Background Image */}
       <Image
-        src={banner}
-        alt="hero"
+        src={`${imagePath}/${selectedCategory.image}`}
+        alt={selectedCategory.title}
         layout="fill"
         objectFit="cover" // Ensures full coverage without zooming
         objectPosition="top" // Moves crop to the bottom
@@ -27,7 +34,7 @@ export default function Banner() {
           You are viewing 
         </p>
         <h1 className="text-white  text-5xl font-ivyMedium capitalize leading-9  ">
-          {category}
+        {selectedCategory.title}
         </h1>
        
       </div>
