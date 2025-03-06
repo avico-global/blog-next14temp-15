@@ -27,20 +27,14 @@ export default function Form() {
         </li>
         <li className="border-b-2 border-gray-500">
           <input
-            type="text"
-            placeholder="Industry"
+            type="number"
+            placeholder="Phone Number"
             className="focus:border-none focus:outline-none p-2"
           />
         </li>
       </ul>
       <ul className="w-full flex flex-col gap-2 mt-10">
-        <li className="border-b-2 border-gray-500">
-          <input
-            type="text"
-            placeholder="Subject"
-            className="focus:border-none focus:outline-none p-2 w-full "
-          />
-        </li>
+      
         <li className="border-b-2 border-gray-500">
           <textarea
             placeholder="Message"

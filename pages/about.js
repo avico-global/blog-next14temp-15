@@ -1,12 +1,13 @@
 import React from "react";
 import Navbar from "@/components/container/navbar/Navbar";
-import Container from "@/components/common/Container";
 import Footer from "@/components/container/footer/Footer";
-import Form from "@/components/container/Form";
+import MarkdownIt from "markdown-it";
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import Image from "next/image";
+import Container from "@/components/common/Container";
+import Fullcontainer from "@/components/common/Fullcontainer";
 
-export default function Contact({
-
+export default function About({
   logo,
   blog_list,
   imagePath,
@@ -18,12 +19,10 @@ export default function Contact({
   banner,
   favicon,
   nav_type,
-  footer_type
-}
-) {
-
-  console.log("Categories", categories )
-
+  footer_type,
+}) {
+  const markdownIt = new MarkdownIt();
+  const content = markdownIt?.render(about_me?.value || "");
   return (
     <div>
       <Navbar
@@ -33,21 +32,48 @@ export default function Contact({
         blog_list={blog_list}
         logo={logo}
       />
-      <Container className="pt-40 pb-20 px-5 lg:max-w-[830px]">
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-hanken text-7xl font-ivyMedium">INQUIRE</h1>
-          <p className="pt-16 font-hanken text-lg">
-            Interested in working together? I can’t wait to hear from you. Use
-            the form below or email directly. You can provide more information
-            here, like what will happen next or additional routes of
-            communication or just delete this text.
-          </p>
-        </div>
-      </Container>
-      <Container className="pb-40 px-5 lg:max-w-[730px]">
-        <Form />
-      </Container>
 
+      <Fullcontainer>
+        <Container>
+          <div className="py-16 md:py-24">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* Image Section */}
+              <div className="relative group">
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-300 to-purple-200 rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-300"></div>
+                <Image
+                  src={`${imagePath}/${about_me.file_name}`}
+                  title={about_me.title || "About Us"}
+                  height={1000}
+                  width={1000}
+                  alt={about_me.title || "About Us"}
+                  className="relative rounded-lg shadow-xl object-cover w-full h-[500px] transform group-hover:scale-[1.01] transition duration-300"
+                />
+              </div>
+
+              {/* Text Section */}
+              <div className="text-left space-y-6">
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  {about_me.title || "About Us"}
+                </h1>
+                <div className="w-20 h-1 bg-gradient-to-r from-blue-300 to-purple-200 rounded-full"></div>
+                <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+                  Discover our story and what makes us unique. We're passionate
+                  about creating meaningful experiences and delivering
+                  exceptional value to our clients.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Fullcontainer>
+
+      <Fullcontainer>
+        <Container className=" text-center justify-center items-center   ">
+          <article className="prose lg:prose-xl text-gray-800 font-hanken">
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          </article>
+        </Container>
+      </Fullcontainer>
       <Footer
         logo={logo}
         imagePath={imagePath}
@@ -66,7 +92,6 @@ export async function getServerSideProps({ req }) {
     domain,
     type: "layout",
   });
-
 
   const meta = await callBackendApi({ domain, type: "meta_home" });
   const logo = await callBackendApi({ domain, type: "logo" });

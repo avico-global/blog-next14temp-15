@@ -4,9 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { sanitizeUrl } from "@/lib/myFun";
 
-export default function Travel({ blog_list = [], imagePath }) {
-
-  const allArticles = blog_list.slice(0, 6);
+export default function Travel({ blogs = [], imagePath }) {
+  const allArticles = blogs.slice(0, 6);
 
   return (
     <div className="bg-secondary py-[110px]">
@@ -20,6 +19,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                   href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                     item?.title
                   )}`}
+                  title={item.title}
                 >
                   <div className="border">
                     <div className="relative w-full aspect-[3/4]">
@@ -29,6 +29,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                             ? `${imagePath}/${item.image}`
                             : "/no-image.png"
                         }
+                        title={item.title}
                         alt={item.title}
                         fill
                         className="object-cover"
@@ -43,6 +44,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                     href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                       item?.title
                     )}`}
+                    title={item.title}
                   >
                     <h2 className="text-black text-left md:text-center font-ivyMedium text-3xl md:text-[32px] md:leading-[32px]">
                       {item.title}
@@ -59,6 +61,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                     href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                       item?.title
                     )}`}
+                    title={item.title}
                   >
                     <h2 className="text-black text-left md:text-center font-ivyMedium text-3xl md:text-[32px] md:leading-[32px]">
                       {item.title}
@@ -74,6 +77,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                       href={`/${sanitizeUrl(
                         item.article_category
                       )}/${sanitizeUrl(item?.title)}`}
+                      title={item.title}
                     >
                       <Image
                         src={
@@ -81,6 +85,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                             ? `${imagePath}/${item.image}`
                             : "/no-image.png"
                         }
+                        title={item.title}
                         alt={item.title}
                         fill
                         className="object-cover"

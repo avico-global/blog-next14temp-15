@@ -9,15 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
-    "markdown-it": "^12.3.2",
+    "markdown-it": "^14.1.0",
     "next": "^15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "swiper": "^11.2.3"
+    "swiper": "^11.2.3",
+    "tailwind-merge": "^3.0.1"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
   }

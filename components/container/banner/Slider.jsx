@@ -6,8 +6,12 @@ import { ChevronLeft, ChevronRight,} from "lucide-react";
 
 
 
-export default function Slider({blog_list,imagePath}) {
-  const posts = blog_list.filter((item)=> item.editorsChoice)
+export default function Slider({
+  blogs=[],
+  imagePath,
+}) {
+
+  const allBlogs=blogs;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesToShow, setSlidesToShow] = useState(1);
   const [hovering, setHovering] = useState(false);
@@ -33,13 +37,13 @@ export default function Slider({blog_list,imagePath}) {
 
   const nextSlide = () => {
     setCurrentIndex((prev) =>
-      prev + slidesToShow >= posts.length ? 0 : prev + 1
+      prev + slidesToShow >= allBlogs.length ? 0 : prev + 1
     );
   };
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
-      prev - 1 < 0 ? posts.length - slidesToShow : prev - 1
+      prev - 1 < 0 ? allBlogs.length - slidesToShow : prev - 1
     );
   };
 
@@ -120,18 +124,27 @@ export default function Slider({blog_list,imagePath}) {
             }`}
             style={{ transform: `translateX(-${(currentIndex * 100) / slidesToShow}%)` }}
           >
-            {posts.map((post) => (
+            {allBlogs.map((post) => (
               <div key={post.id} className={`flex-shrink-0 flex px-3 flex-row w-full sm:w-1/2 lg:w-1/3`}>
-                <Link href={`/${post.category}/${post.title}`} className="text-center">
+                <Link 
+                href={`/${post.category}/${post.title}`}
+                 className="text-center"
+                 title={post.title}
+                 >
                   <Image
-                    src={`${imagePath}/${post.image}`}
+                    src={
+                      post.image
+                        ? `${imagePath}/${post.image}`
+                        : "/no-image.png"
+                    }
+                    title={post.title}
                     alt={post.title}
                     width={1000}
                     height={1000}
                     className="aspect-square object-cover"
                   />
                   <h3 className="mt-2 font-ivyMedium text-2xl px-3 pb-2 pt-4">{post.title}</h3>
-                  <p className="text-sm text-gray-500">{post.date}</p>
+                  <p className="text-sm text-gray-500">{post.published_at}</p>
                 </Link>
               </div>
             ))}

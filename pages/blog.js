@@ -1,118 +1,190 @@
-import React from 'react'
-import Rightbar from '@/components/container/banner/blog/Rightbar'
-import Image from 'next/image'
-import image from "../public/images/category3.webp"
-import image2 from "../public/images/codesupply3.3.webp"
-import image3 from "../public/images/category1.webp"
-import Container from '../components/common/Container'
-import Navbar from '../components/container/navbar/Navbar'
-import Footer from '../components/container/footer/Footer'
+import React from "react";
+import Rightbar from "@/components/container/banner/blog/Rightbar";
+import Image from "next/image";
+import Container from "../components/common/Container";
+import Navbar from "../components/container/navbar/Navbar";
+import Footer from "../components/container/footer/Footer";
+import {
+  callBackendApi,
+  getDomain,
+  getImagePath,
+  sanitizeUrl,
+} from "@/lib/myFun";
+import Link from "next/link";
 
-import Link from 'next/link'
-import { callBackendApi, getDomain, getImagePath ,sanitizeUrl} from "@/lib/myFun";
 export default function Blog({
-    logo,
-    meta,
-    domain,
-    imagePath,
-    favicon,
-    categories,
-    banner,
-    blog_list,
-    about_me,
-  }) {
-    const blog = blog_list || [];
+  logo,
+  blog_list,
+  imagePath,
+  about_me,
+  categories,
+  domain,
+  meta,
+  contact_details,
+  banner,
+  favicon,
+  nav_type,
+  footer_type,
+}) {
+  console.log("ABout", about_me);
+  console.log("LOGO", logo);
 
-    return (
-        <>
-            <Navbar logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath}/>
-            <Container className="mt-20 py-10 px-5 md:px-15 lg:px-24">
-                <div className="relative w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-20 ">
-                    {/* Left Content */}
-                    <div className="col-span-2">
-                        {/* content */}
-                        <div className="flex flex-col gap-6 py-10 text-left md:text-center">
+  return (
+    <>
+      <Navbar
+        className="text-primary"
+        categories={categories}
+        imagePath={imagePath}
+        blog_list={blog_list}
+        logo={logo}
+      />
+      <Container className="mt-20 py-10 px-5 md:px-15 lg:px-24">
+        <div className="relative w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-20">
+          {/* Left Content */}
+          <div className="col-span-2">
+            {/* content */}
+            <div className="flex flex-col gap-6 py-10 text-left md:text-center">
+              <h1 className=" text-2xl font-ivyMedium font-medium w-full text-center capitalize">
+                THE BLOG
+              </h1>
+              <p className="font-ivyMedium  text-[40px] text-primary md:px-5 leading-10 font-thin ">
+                Welcome to my vibrant world of fashion, style, and sustainable
+                living!
+              </p>
+              <div className="text-[19px] leading-[22px] md:px-20 font-thin font-hanken">
+                I'm Emily Bouquet, your guide and companion on this journey
+                through the ever-evolving landscape of trends, timeless
+                elegance, and eco-conscious choices.
+              </div>
+            </div>
 
-                            <h2 className=" text-2xl font-ivyMedium font-medium w-full text-center capitalize">
-                                THE BLOG
-                            </h2>
-                            <p className="font-ivyMedium  text-[40px] text-primary md:px-5 leading-10 font-thin ">
-                                Welcome to my vibrant world of fashion, style, and sustainable living!
-                            </p>
-                            <div className="text-[19px] leading-[22px] md:px-20 font-thin font-hanken">
-                                I'm Emily Bouquet, your guide and companion on this journey through the ever-evolving landscape of trends, timeless elegance, and eco-conscious choices.
-                            </div>
+            {blog_list.map((item, index) => (
+              <div key={index} className="flex flex-col gap-6 py-10">
+                <Link
+                title={item.title}
+                  key={index}
+                  href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                    item?.title
+                  )}`}
+                >
+                  <Image
+                    src={
+                      item.image
+                        ? `${imagePath}/${item.image}`
+                        : "/no-image.png"
+                    }
+                    title={item.title}
+                    height={1300}
+                    width={1300}
+                    alt="#"
+                    quality={100}
+                    className="h-auto w-auto max-w-full max-h-full object-contain"
+                  />
+                </Link>
 
-                        </div>
+                <div className="flex flex-col gap-6 py-10">
+                  <Link
+                    key={index}
+                    href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                      item?.title
+                    )}`}
+                    title={item.title}
+                  >
+                    <h2 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
+                      {item.category}
+                    </h2>
+                    <p className="font-ivyMedium  text-[40px] text-black leading-10 font-thin ">
+                      {item.title}
+                    </p>
+                    <p className="  text-[20px]  leading-10   ">
+                      {item.tagline}
+                    </p>
+                  </Link>
 
-                        {blog.map((item, index) => (
-                            <Link href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`} key={index} className="flex flex-col gap-6 py-10">
-                                <Image
-                                    src={`${imagePath}/${item.image}`}
-                                    height={1300}
-                                    width={1300}
-                                    alt="#"
-                                    quality={100}
-                                    className="h-auto w-auto max-w-full max-h-full object-contain"
-                                />
-                                <div className="flex flex-col gap-6 py-10 border-b border-gray-200">
-                                    <h2 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
-                                        {item.article_category}
-                                    </h2>
-                                    <p className="font-ivyMedium text-[30px]  md:text-[40px] text-black leading-10 font-thin ">
-                                        {item.title} 
-                                    </p>
-                                    <div className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
-                                        {item.published_at}
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-
+                  <div className=" flex justify-between">
+                    <div className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
+                      {item.published_at}
                     </div>
 
-                    {/* Right Sidebar (Sticky) */}
-                    <div className="col-span-1 h-full ">
-                        <div className="sticky top-20 ">
-                            <Rightbar aboutMe={about_me} imagePath={imagePath} categories={categories} />
-                        </div>
+                    <div className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
+                      {item.author}
                     </div>
+                  </div>
                 </div>
-            </Container >
-            <Footer categories={categories} />
-        </>
-    )
+              </div>
+            ))}
+          </div>
+
+          {/* Right Sidebar (Sticky) */}
+          <div className="col-span-1 h-full">
+            <div className="sticky top-20">
+              <Rightbar
+                about_me={about_me}
+                imagePath={imagePath}
+                categories={categories}
+              />
+            </div>
+          </div>
+        </div>
+      </Container>
+      <Footer
+        logo={logo}
+        imagePath={imagePath}
+        about_me={about_me}
+        categories={categories}
+        blogs={blog_list}
+      />
+    </>
+  );
 }
 
 export async function getServerSideProps({ req }) {
-    const domain = getDomain(req?.headers?.host);
-    const logo = await callBackendApi({ domain, tag: "logo" });
-    const project_id = logo?.data[0]?.project_id || null;
-  
-    let layoutPages = await callBackendApi({
-      domain,
-      tag: "layout",
-    });
-  
-    const meta = await callBackendApi({ domain, tag: "meta_home" });
-    const favicon = await callBackendApi({ domain, tag: "favicon" });
-    const imagePath = await getImagePath(project_id, domain);
-    const categories = await callBackendApi({ domain, tag: "categories" });
-    const about_me = await callBackendApi({ domain, tag: "about_me" });
-    const banner = await callBackendApi({ domain, tag: "banner" });
-    const blog_list = await callBackendApi({ domain, tag: "blog_list" });
-  
+  const domain = getDomain(req?.headers?.host);
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
+  const meta = await callBackendApi({ domain, type: "meta_home" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
+
+  const project_id = logo?.data[0]?.project_id || null;
+  const about_me = await callBackendApi({ domain, type: "about_me" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const all_data = await callBackendApi({ domain, type: "" });
+  const imagePath = await getImagePath(project_id, domain);
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "home");
+  }
+
+  if (!page?.enable) {
     return {
-      props: {
-        logo: logo?.data?.[0]?.value || null,
-        meta: meta?.data[0]?.value || null,
-        domain,
-        imagePath,
-        about_me: about_me?.data[0]?.value || null,
-        categories: categories?.data[0]?.value || [],
-        favicon: favicon?.data?.[0]?.value || null,
-        banner: banner?.data[0] || null,
-        blog_list: blog_list?.data[0]?.value || [],
-      },
+      notFound: true,
     };
   }
+
+  return {
+    props: {
+      domain,
+      imagePath,
+      meta: meta?.data[0]?.value || null,
+      favicon: favicon?.data[0]?.file_name || null,
+      logo: logo?.data[0] || null,
+      blog_list: blog_list?.data[0]?.value || [],
+      categories: categories?.data[0]?.value || null,
+      copyright: copyright?.data[0]?.value || null,
+      about_me: about_me?.data[0] || null,
+      banner: banner?.data[0],
+      all_data,
+      page,
+    },
+  };
+}
