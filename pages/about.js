@@ -14,12 +14,7 @@ export default function About({
   about_me,
   categories,
   domain,
-  meta,
-  contact_details,
-  banner,
-  favicon,
-  nav_type,
-  footer_type,
+ 
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value || "");
