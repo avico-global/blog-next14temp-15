@@ -18,6 +18,7 @@ export default function popular({ blogs = [], imagePath, blog_list }) {
         <div className="grid w-full  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[50px] pt-[90px] px-12">
           {popularBlogs.map((item, index) => (
             <Link
+              key={index}
               href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                 item?.title
               )}`}

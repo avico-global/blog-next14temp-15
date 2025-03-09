@@ -21,6 +21,8 @@ export default function Latest({ blogs = [], imagePath }) {
 
               {latestBlogs.map((blog, index) => (
                 <Link
+                
+                  key={index}
                   title={blog.title}
                   href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(
                     blog?.title
