@@ -20,9 +20,10 @@ export default function Home({
   categories,
   banner,
   blog_list,
+  about_me,
 }) {
 
-   console.log("blog_list in index", blog_list)
+ console.log("Logo",logo)
   return (
     <div>
       <Head>
@@ -59,44 +60,67 @@ export default function Home({
           href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
       </Head>
-      <Navbar logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath} />
+      <Navbar logo={logo} text={"text-white"} categories={categories} blog_list={blog_list} imagePath={imagePath} />
       <Banner data={banner?.value} image={`${imagePath}/${banner?.file_name}`} />
       <Latest blog_list={blog_list} imagePath={imagePath} />
       <Mostview blog_list={blog_list} imagePath={imagePath} />
       <Popular blog_list={blog_list} imagePath={imagePath} />
       <Travel blog_list={blog_list} imagePath={imagePath} />  
-      <Footer logo={logo} categories={categories} />
+      <Footer about_me={about_me} logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath}/>
+   
     </div>
   );
 }
 
+
+
 export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const logo = await callBackendApi({ domain, tag: "logo" });
-  const project_id = logo?.data[0]?.project_id || null;
 
   let layoutPages = await callBackendApi({
     domain,
-    tag: "layout",
+    type: "layout",
   });
 
-  const meta = await callBackendApi({ domain, tag: "meta_home" });
-  const favicon = await callBackendApi({ domain, tag: "favicon" });
+  const meta = await callBackendApi({ domain, type: "meta_home" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
+
+  const project_id = logo?.data[0]?.project_id || null;
+  const about_me = await callBackendApi({ domain, type: "about_me" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const all_data = await callBackendApi({ domain, type: "" });
   const imagePath = await getImagePath(project_id, domain);
-  const categories = await callBackendApi({ domain, tag: "categories" });
-  const banner = await callBackendApi({ domain, tag: "banner" });
-  const blog_list = await callBackendApi({ domain, tag: "blog_list" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "home");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {
-      logo: logo?.data?.[0]?.value || null,
-      meta: meta?.data[0]?.value || null,
       domain,
       imagePath,
-      categories: categories?.data[0]?.value || [],
-      favicon: favicon?.data?.[0]?.value || null,
-      banner: banner?.data[0] || null,
+      meta: meta?.data[0]?.value || null,
+      favicon: favicon?.data[0]?.file_name || null,
+      logo: logo?.data[0] || null,
       blog_list: blog_list?.data[0]?.value || [],
+      categories: categories?.data[0]?.value || null,
+      copyright: copyright?.data[0]?.value || null,
+      about_me: about_me?.data[0] || null,
+      banner: banner?.data[0],
+      all_data,
+      page,
     },
   };
 }

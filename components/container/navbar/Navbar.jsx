@@ -16,30 +16,18 @@ import image1 from "../../../public/images/section4.1.webp";
 import image2 from "../../../public/images/section4.2.webp";
 import image3 from "../../../public/images/section4.3.webp";
 import { sanitizeUrl } from "@/lib/myFun";
+import Logo from "./Logo";
 
-/* ------------------------------------------------------------
-   Randomly incoming data from database
--------------------------------------------------------------*/
-
-
-// Extract unique categories & slice(0,3)
-
-
-/* ------------------------------------------------------------
-   Tabs Component
--------------------------------------------------------------*/
-
-/* ------------------------------------------------------------
-   ImageCard Component
--------------------------------------------------------------*/
 const ImageCard = ({ item ,imagePath }) => (
   
   <Link
+  title={`${item?.title} - ${item?.article_category}`}
     href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`}
     className="flex flex-col items-center transition-all duration-500"
   >
     <div className="aspect-[4/3] flex items-center justify-center overflow-hidden">
      <Image
+        title={item?.title}
         src={`${imagePath}/${item.image}`}
         alt={item?.title}
         height={170}
@@ -58,9 +46,7 @@ const ImageCard = ({ item ,imagePath }) => (
   </Link>
 );
 
-/* ------------------------------------------------------------
-   TabContent Component
--------------------------------------------------------------*/
+
 const TabContent = ({ data = [], imagePath }) => {
   return (
     <div className="grid grid-cols-3 gap-5 bg-dropdown w-full">
@@ -73,9 +59,6 @@ const TabContent = ({ data = [], imagePath }) => {
   );
 };
 
-/* ------------------------------------------------------------
-   Main Categories Component
--------------------------------------------------------------*/
 const Categories = ({ categories, blog_list, imagePath }) => {
   const [activeTab, setActiveTab] = useState(categories[0]);
   const data = blog_list?.filter((item) => item?.article_category === activeTab.title);
@@ -85,7 +68,8 @@ const Categories = ({ categories, blog_list, imagePath }) => {
       <div className="flex flex-col text-xs border-r border-text/20 px-6 mr-5 w-[230px]">
         {categories.map((tab, index) => (
           <Link
-            href="#"
+          title={`${tab?.title}`}
+            href={`/${sanitizeUrl(tab?.title)}`}
             key={index}
             onMouseEnter={() => setActiveTab(tab)}
             className={`text-start py-4 border-b border-text/20 text-xs px-3 font-hanken uppercase font-thin transition-all duration-300 ${
@@ -108,17 +92,8 @@ const Categories = ({ categories, blog_list, imagePath }) => {
 export default function Navbar({
   logo,
   blog_list,
-  category,
-  staticPages,
-  isActive,
   imagePath,
-  openSearch,
-  searchQuery,
-  searchContainerRef,
-  handleSearchChange,
-  // handleSearchToggle,
-  toggleSidebar,
-  filteredBlogs,
+  text,
   categories,
 }) {
   const liClasses =
@@ -152,18 +127,39 @@ export default function Navbar({
 
   // Search states
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchResultsRef = useRef(null);
   const inputRef = useRef(null);
 
-  const handleSearchToggle = () => {
-    setIsSearchOpen(true);
-    setTimeout(() => inputRef.current?.focus(), 50);
-  };
+  // Add click outside handler for search results
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchResultsRef.current && !searchResultsRef.current.contains(event.target) &&
+          !inputRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
 
-  const handleSearchBlur = () => {
-    if (!inputRef.current?.value) {
-      setIsSearchOpen(false);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) {
+      setTimeout(() => inputRef.current?.focus(), 50);
     }
   };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredBlogs = blog_list?.filter((blog) =>
+    blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    blog.article_category?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -179,7 +175,7 @@ export default function Navbar({
         className={`fixed top-0 left-0 w-full transition-all duration-500 z-50 ${
           showNavbar
             ? "bg-white text-black shadow-lg"
-            : "bg-transparent text-white"
+            : `bg-transparent ${text} `
         }`}
       >
         <div className="py-4 md:py-[10px] sm:px-5">
@@ -193,38 +189,40 @@ export default function Navbar({
               >
                 <MenuIcon className="w-5 h-5" strokeWidth={1} />
               </button>
-              <Link
-                href="/"
+              <div
                 className={`text-[16px] tracking-[4px] font-ivyMedium font-thin uppercase transition-colors duration-300 ${
-                  showNavbar ? "text-primary" : "text-white"
+                  showNavbar ? "text-primary" : `${text}`
                 }`}
               >
-                {logo?.logoText}
-              </Link>
+                <Logo logo={logo} imagePath={imagePath} />
+              </div>
             </div>
 
             {/* Center Menu (Desktop) */}
             <div className="hidden md:flex justify-between items-center text-md font-semibold">
               <Link
+              title="Home"
                 href="/"
                 className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
-                  showNavbar ? "text-primary" : "text-white"
+                  showNavbar ? "text-primary" : `${text}`
                 }`}
               >
                 Home
               </Link>
               <Link
+              title="Blog"
                 href="/blog"
                 className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
-                  showNavbar ? "text-primary" : "text-white"
+                  showNavbar ? "text-primary" : `${text}`
                 }`}
               >
                 Blog
               </Link>
               <Link
+              title="Contact"
                 href="/contact"
                 className={`py-2 text-xs hover:text-text px-3 font-hanken uppercase font-thin transition-colors duration-300 ${
-                  showNavbar ? "text-primary" : "text-white"
+                  showNavbar ? "text-primary" : `${text}`
                 }`}
               >
                 Contact
@@ -237,7 +235,7 @@ export default function Navbar({
                 <div className="group py-2 px-3">
                   <div
                     className={`flex text-xs items-center gap-1 font-hanken font-thin uppercase group hover:cursor-pointer transition-colors duration-300 ${
-                      showNavbar ? "text-primary" : "text-white"
+                      showNavbar ? "text-primary" : `${text}`
                     }`}
                   >
                     Categories
@@ -269,6 +267,8 @@ export default function Navbar({
                 <input
                   ref={inputRef}
                   type="text"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                   placeholder="Type to search..."
                   className={`
                     bg-transparent
@@ -278,14 +278,12 @@ export default function Navbar({
                     font-hanken
                     transition-all
                     duration-500
-                    ${
-                      showNavbar
-                        ? "border-primary/20 focus:border-primary placeholder:text-primary/50 text-primary"
-                        : "border-white/20 focus:border-white placeholder:text-white/50 text-white"
+                    ${showNavbar 
+                      ? "border-primary/20 focus:border-primary placeholder:text-primary/50 text-primary"
+                      :`border-white/20 focus:border-primary/10  placeholder:${text} ${text}`
                     }
                     ${isSearchOpen ? "w-[200px] px-4 py-2" : "w-0 px-0 py-2"}
                   `}
-                  onBlur={handleSearchBlur}
                 />
                 <button
                   type="button"
@@ -294,11 +292,7 @@ export default function Navbar({
                     p-2
                     transition-all
                     duration-300
-                    ${
-                      showNavbar
-                        ? "text-primary hover:text-text"
-                        : "text-white hover:text-gray-200"
-                    }
+                    ${showNavbar ? "text-primary hover:text-accent" : `${text} hover:text-lavender`}
                     ${isSearchOpen ? "-ml-8" : "ml-0"}
                   `}
                 >
@@ -313,6 +307,57 @@ export default function Navbar({
                     strokeWidth={1.5}
                   />
                 </button>
+                
+                {/* Search Results Dropdown */}
+                {isSearchOpen && searchQuery && (
+                  <div 
+                    ref={searchResultsRef}
+                    className="absolute top-full right-0 mt-2 w-[300px] bg-white rounded-lg shadow-xl z-50 border border-lavender"
+                  >
+                    <div className="search-results max-h-[60vh] overflow-y-auto">
+                      {filteredBlogs?.length > 0 ? (
+                        filteredBlogs?.map((blog, index) => (
+                          <Link
+                          title={`${blog?.title} - ${blog?.article_category}`}
+                            key={index}
+                            href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(blog.title)}`}
+                            onClick={() => {
+                              setIsSearchOpen(false);
+                              setSearchQuery("");
+                            }}
+                          >
+                            <div className="flex items-start gap-3 p-3 hover:bg-lavender transition-colors">
+                              {blog.image && (
+                                <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                                  <Image
+                                    title={blog.title}
+                                    src={`${imagePath}/${blog.image}`}
+                                    alt={blog.title}
+                                    width={48}
+                                    height={48}
+                                    className="object-cover w-full h-full"
+                                  />
+                                </div>
+                              )}
+                              <div>
+                                <h4 className="text-sm font-medium text-primary">
+                                  {blog.title}
+                                </h4>
+                                <p className="text-xs text-text mt-0.5">
+                                  {blog.article_category}
+                                </p>
+                              </div>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="p-4 text-center text-sm text-text">
+                          No results found for "{searchQuery}"
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
           </div>
@@ -350,18 +395,21 @@ export default function Navbar({
                 ISABELLE ROCHE
               </h2>
               <Link
+              title="Home"
                 href="/"
                 className="block py-3 border-y border-white/20 hover:text-text text-2xl font-light text-white"
               >
                 Home
               </Link>
               <Link
+              title="Blog"
                 href="/blog"
                 className="block py-3 border-b border-white/20 hover:text-text text-2xl font-light text-white"
               >
                 Blog
               </Link>
               <Link
+              title="Contact"
                 href="/contact"
                 className="block py-3 border-b border-white/20 hover:text-text text-2xl font-light text-white"
               >
@@ -392,7 +440,9 @@ export default function Navbar({
                           className="block border-b border-white/20 py-2 hover:bg-white/10 transition-colors"
                         >
                           {/* Using a normal <a> to remove Next.js link hydration */}
-                          <Link href={`/${sanitizeUrl(category?.title)}`}>
+                          <Link
+                          title={`${category?.title}`}
+                          href={`/${sanitizeUrl(category?.title)}`}>
                             {category?.title}
                           </Link>
                         </li>

@@ -3,44 +3,47 @@ import Container from "@/components/common/Container";
 import Link from "next/link";
 import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import Image from "next/image";
-import { sanitizeUrl} from "@/lib/myFun";
-
-export default function Footer({ logo, categories,blog_list,imagePath }) {
+import { sanitizeUrl } from "@/lib/myFun";
+import MarkdownIt from "markdown-it";
+import Logo from "../navbar/Logo";
+export default function Footer({
+  logo,
+  categories,
+  blog_list,
+  imagePath,
+  about_me,
+}) {
   const pages = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
     { name: "Contact", href: "/contact" },
     { name: "Blog", href: "/blog" },
   ];
-
- 
+  const markdon = new MarkdownIt();
+  const aboutMeData = markdon?.render(about_me?.value || " ");
 
   return (
     <footer className="bg-[#1C1C1C]  text-white py-20 ">
       <Container className="md:px-24 py-5 max-w-[1100px]  ">
         <div className="md:hidden pb-6 md:pb-0  items-start flex flex-col md:items-center col-span-2  justify-center   px-[10px] ">
-          <h2 className="text-5xl text-center font-ivyMedium uppercase ">
-            {logo?.logoText}
+          <h2 className="text-5xl text-center font-ivyMedium uppercase  ">
+            <Logo logo={logo} imagePath={imagePath} />
           </h2>
-          <p className="py-2 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
-            I’m based in Los Angeles, CA but available for travel worldwide.
-          </p>
-          <p className="py-1 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
-            E. contact@isabelleroche.com
-          </p>
-          <p className="py-2 text-[11px] text-center text-[#f7f7f7] md:px-3  font-hanken uppercase font-thin">
-            T. 555 – 352 – 6521
-          </p>
+          <div>
+              <div
+                className="text-xs md:text-center text-left text-[#f7f7f7] hover:text-text  font-hanken uppercase font-thin"
+                dangerouslySetInnerHTML={{ __html: aboutMeData.slice(0, 180) }}
+              />
+            </div>
         </div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 ">
           <ul className=" flex-col flex items-start justify-center gap-3 ">
-            {pages.map((page,index) => (
+            Quick Links
+            {pages.map((page, index) => (
               <li key={index}>
                 <Link
+                  title={`${page?.name}`}
                   className="text-sm text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
-                  href="#"
+                  href={page.href}
                 >
                   {page.name}
                 </Link>
@@ -49,25 +52,22 @@ export default function Footer({ logo, categories,blog_list,imagePath }) {
           </ul>
 
           <div className="hidden md:flex flex-col items-center col-span-2  justify-center px-[10px] ">
-          <h2 className="text-5xl  text-center font-ivyMedium uppercase ">
-            {logo?.logoText} 
-          </h2>
-           
-            <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
-              I’m based in Los Angeles, CA but available for travel worldwide.
-            </p>
-            <p className="py-1 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
-              E. contact@isabelleroche.com
-            </p>
-            <p className="py-2 text-[11px] text-center text-[#f7f7f7] px-3  font-hanken uppercase font-thin">
-              T. 555 – 352 – 6521
-            </p>
+            <h2 className="text-5xl  text-center w-fit font-ivyMedium uppercase  ">
+              <Logo logo={logo} imagePath={imagePath} />
+            </h2>
+
+            <div>
+              <div
+                className="text-xs text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
+                dangerouslySetInnerHTML={{ __html: aboutMeData.slice(0, 180) }}
+              />
+            </div>
           </div>
 
           <div className=" flex-col flex items-start md:items-end ">
             <ul className="flex flex-col w-fit gap-3 ">
-              categories
-              {categories.map((item,index) => (
+              Categories
+              {categories.map((item, index) => (
                 <li key={index}>
                   <Link
                     className="text-sm  text-center text-[#f7f7f7] hover:text-text px-3  font-hanken uppercase font-thin"
@@ -95,10 +95,10 @@ export default function Footer({ logo, categories,blog_list,imagePath }) {
 
       {/* contact us section */}
       <Container className="py-20 px-5 ">
-        <h2 className="text-center text-2xl py-2  font-ivyMedium uppercase ">
+      <h2 className="text-center text-xl sm:text-2xl py-2 font-ivyMedium uppercase">
           JOIN OUR LIST
         </h2>
-        <p className="text-center text-xl  pb-8  font-hanken  ">
+        <p className="text-center text-lg sm:text-xl pb-8 font-hanken">
           Receive updates on special promotions, exclusive events and
           announcements.
         </p>
@@ -112,23 +112,39 @@ export default function Footer({ logo, categories,blog_list,imagePath }) {
             <button className="bg-[#85705F] text-white px-8 hover:bg-black py-4 md:py-0  h-full ">
               sign up
             </button>
-          </div> 
-            <div className="flex flex-row items-center justify-center gap-4 h-20 text-hanken ">
-              <input type="checkbox" className="w-6 h-6 appearance-none border border-white/15 checked:bg-black checked:border-black checked:before:content-['✔'] checked:before:text-white checked:before:flex checked:before:items-center checked:before:justify-center checked:before:w-full checked:before:h-full" />
-              <p className="text-sm text-text">I have read and agree to the <Link href="/privacy-policy" className="text-white">Privacy Policy</Link> </p>
-            </div>
+          </div>
+          <div className="flex flex-row items-center justify-center gap-4 h-20 text-hanken ">
+            <input
+              type="checkbox"
+              className="w-6 h-6 appearance-none border border-white/15 checked:bg-black checked:border-black checked:before:content-['✔'] checked:before:text-white checked:before:flex checked:before:items-center checked:before:justify-center checked:before:w-full checked:before:h-full"
+            />
+            <p className="text-sm text-text">
+              I have read and agree to the{" "}
+              <Link
+                title="Privacy Policy"
+                href="/privacy-policy"
+                className="text-white"
+              >
+                Privacy Policy
+              </Link>{" "}
+              and{" "}
+              <Link
+                title="Terms and conditions"
+                href="/terms-and-conditions"
+                className="text-white"
+              >
+                Terms and conditions
+              </Link>
+            </p>
+          </div>
         </div>
       </Container>
     </footer>
   );
 }
 
-export function Card({blog_list,imagePath}) {
-
-  const data = blog_list?.slice(0,5);
-console.log("blog_data in footer",blog_list?.map(item=>item?.image))
-console.log("imagePath in footer",imagePath)
-
+export function Card({ blog_list, imagePath }) {
+  const data = blog_list?.slice(0, 5);
   return (
     <div className="grid grid-cols-2 gap-[2px] md:flex md:justify-center md:gap-3">
       {data?.map((item, index) => (
@@ -140,11 +156,15 @@ console.log("imagePath in footer",imagePath)
         >
           {/* Image container */}
           <Link
-            href="#"
+            title={item?.title}
+            href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(
+              item?.title
+            )}`}
             className="block w-full aspect-square overflow-hidden"
           >
             {/* Image */}
             <Image
+              title={item?.title}
               src={`${imagePath}/${item?.image}`}
               alt={item.title}
               width={1000}

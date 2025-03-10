@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight,} from "lucide-react";
+import { sanitizeUrl } from "@/lib/myFun";
 
 
 
@@ -122,8 +123,11 @@ export default function Slider({blog_list,imagePath}) {
           >
             {posts.map((post) => (
               <div key={post.id} className={`flex-shrink-0 flex px-3 flex-row w-full sm:w-1/2 lg:w-1/3`}>
-                <Link href={`/${post.category}/${post.title}`} className="text-center">
+                <Link
+                title={post.title}
+                 href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(post.title)}`} className="text-center">
                   <Image
+                    title={post.title}
                     src={`${imagePath}/${post.image}`}
                     alt={post.title}
                     width={1000}

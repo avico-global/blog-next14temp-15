@@ -23,20 +23,25 @@ export default function Mostview({ blog_list, imagePath }) {
       <Container className=" px-5  ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[58px] pt-[90px]  ">
           {mustreadblog.map((item, index) => (
-            <Link key={item.id || index} href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`} className="">
+            <Link
+            title={`${item?.title} - ${item?.article_category}`}
+            key={item.id || index} href={`/${sanitizeUrl(item?.article_category)}/${sanitizeUrl(item?.title)}`} className="">
               <Image
+              title={item?.title}
                 src={`${imagePath}/${item.image}`}
                 alt={item.title}
                 width={1000}
                 height={1000}
               />
-              
-              <h2 className="text-black text-[29px] leading-[35px] text-center px-4 pt-[54px] font-thin font-ivyMedium  ">
+              <div className="flex flex-col items-center justify-center">
+
+              <h2 className="text-black  text-[29px] leading-[35px] text-center px-4 pt-[54px] font-thin font-ivyMedium  ">
                 {item.title}
               </h2>
               <p className="text-[16px]  leading-[25px]  text-center pt-7 px-4 font-thin font-hanken ">
                 {item.tagline}
               </p>
+              </div>
             </Link>
           ))}
         </div>

@@ -20,6 +20,7 @@ export default function Latest({ blog_list = [], imagePath }) {
               </h2>
               {latestblog.map((blog, index) => (
                 <Link
+                title={`${blog?.title} - ${blog?.article_category}`}
                   key={blog?.id || index}
                   href={`/${sanitizeUrl(blog?.article_category)}/${sanitizeUrl(
                     blog?.title
@@ -42,6 +43,7 @@ export default function Latest({ blog_list = [], imagePath }) {
 
         {latestblog.map((blog, index) => (
           <Link
+          title={`${blog?.title} - ${blog?.article_category}`}
           key={blog?.id || index}
             href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(
               blog?.title
@@ -49,6 +51,7 @@ export default function Latest({ blog_list = [], imagePath }) {
           >
             <div  className=" px-5  ">
               <Image
+              title={blog?.title}
                 src={
                   blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"
                 }
@@ -63,6 +66,7 @@ export default function Latest({ blog_list = [], imagePath }) {
         <div className=" px-5 lg:px-[50px]">
           {latestblog2.map((blog, index) => (
             <Link
+            title={`${blog?.title} - ${blog?.article_category}`}
               key={blog?.id || index}
               href={`/${sanitizeUrl(blog?.article_category)}/${sanitizeUrl(
                 blog?.title
@@ -70,6 +74,7 @@ export default function Latest({ blog_list = [], imagePath }) {
               className="grid  grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-6  "
             >
               <Image
+              title={blog?.title}
                 src={
                   blog.image ? `${imagePath}/${blog?.image}` : "/no-image.png"
                 }
@@ -80,9 +85,9 @@ export default function Latest({ blog_list = [], imagePath }) {
               />
 
               <div className=" h-full">
-                <h1 className="text-white text-[22px]  font-light pt-[20px] font-ivyMedium uppercase ">
+                <h2 className="text-white text-[22px]  font-light pt-[20px] font-ivyMedium uppercase ">
                   {blog?.title}
-                </h1>
+                </h2>
                 <p className="text-white text-[25px]  font-light font-ivy pt-3 sm:line-clamp-5 leading-[25px]">
                   {blog?.tagline}
                 </p>

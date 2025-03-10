@@ -16,6 +16,7 @@ export default function Banner({imagePath, categories}) {
     <div className="relative w-full h-[50vh]">
       {/* Background Image */}
       <Image
+      title={selectedCategory.title}
         src={`${imagePath}/${selectedCategory.image}`}
         alt={selectedCategory.title}
         layout="fill"

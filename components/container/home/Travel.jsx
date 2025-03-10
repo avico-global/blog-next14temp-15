@@ -16,6 +16,7 @@ export default function Travel({ blog_list = [], imagePath }) {
             {index % 2 === 0 ? (
               <>
                 <Link
+                title={`${item?.title} - ${item?.article_category}`}
                   key={index}
                   href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                     item?.title
@@ -24,13 +25,15 @@ export default function Travel({ blog_list = [], imagePath }) {
                   <div className="border">
                     <div className="relative w-full aspect-[3/4]">
                       <Image
+                      title={item?.title}
                         src={
                           item.image
                             ? `${imagePath}/${item.image}`
                             : "/no-image.png"
                         }
                         alt={item.title}
-                        fill
+                        height={1800}
+                        width={1800}
                         className="object-cover"
                       />
                     </div>
@@ -39,6 +42,7 @@ export default function Travel({ blog_list = [], imagePath }) {
 
                 <div className="flex justify-center items-center md:px-20 pb-10 md:pb-0 border-b-2 border-black md:border-none">
                   <Link
+                  title={`${item?.title} - ${item?.article_category}`}
                     key={index}
                     href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                       item?.title
@@ -55,6 +59,7 @@ export default function Travel({ blog_list = [], imagePath }) {
               <>
                 <div className="flex justify-center items-center md:px-20 pb-10 md:pb-0 border-b-2 border-black md:border-none order-2 md:order-1">
                   <Link
+                  title={`${item?.title} - ${item?.article_category}`}
                     key={index}
                     href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                       item?.title
@@ -70,19 +75,22 @@ export default function Travel({ blog_list = [], imagePath }) {
                 <div className="border order-1 md:order-2">
                   <div className="relative w-full aspect-[3/4]">
                     <Link
+                    title={`${item?.title} - ${item?.article_category}`}
                       key={index}
                       href={`/${sanitizeUrl(
                         item.article_category
                       )}/${sanitizeUrl(item?.title)}`}
                     >
                       <Image
+                      title={item?.title}
                         src={
                           item.image
                             ? `${imagePath}/${item.image}`
                             : "/no-image.png"
                         }
                         alt={item.title}
-                        fill
+                        height={1800}
+                        width={1800}
                         className="object-cover"
                       />
                     </Link>
