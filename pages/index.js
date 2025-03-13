@@ -9,8 +9,6 @@ import Travel from "@/components/container/home/Travel";
 import Head from "next/head";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 
-
-
 export default function Home({
   logo,
   meta,
@@ -22,8 +20,7 @@ export default function Home({
   blog_list,
   about_me,
 }) {
-
- console.log("Logo",logo)
+  console.log("Logo", logo);
   return (
     <div>
       <Head>
@@ -60,19 +57,31 @@ export default function Home({
           href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
       </Head>
-      <Navbar logo={logo} text={"text-white"} categories={categories} blog_list={blog_list} imagePath={imagePath} />
-      <Banner data={banner?.value} image={`${imagePath}/${banner?.file_name}`} />
+      <Navbar
+        logo={logo}
+        text={"text-white"}
+        categories={categories}
+        blog_list={blog_list}
+        imagePath={imagePath}
+      />
+      <Banner
+        data={banner?.value}
+        image={`${imagePath}/${banner?.file_name}`}
+      />
       <Latest blog_list={blog_list} imagePath={imagePath} />
       <Mostview blog_list={blog_list} imagePath={imagePath} />
       <Popular blog_list={blog_list} imagePath={imagePath} />
-      <Travel blog_list={blog_list} imagePath={imagePath} />  
-      <Footer about_me={about_me} logo={logo} categories={categories} blog_list={blog_list} imagePath={imagePath}/>
-   
+      <Travel blog_list={blog_list} imagePath={imagePath} />
+      <Footer
+        about_me={about_me}
+        logo={logo}
+        categories={categories}
+        blog_list={blog_list}
+        imagePath={imagePath}
+      />
     </div>
   );
 }
-
-
 
 export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
