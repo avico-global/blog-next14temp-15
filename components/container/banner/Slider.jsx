@@ -125,7 +125,7 @@ export default function Slider({blog_list,imagePath}) {
               <div key={post.id} className={`flex-shrink-0 flex px-3 flex-row w-full sm:w-1/2 lg:w-1/3`}>
                 <Link
                 title={post.title}
-                 href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(post.title)}`} className="text-center">
+                 href={`/${sanitizeUrl(post.title)}`} className="text-center">
                   <Image
                     title={post.title}
                     src={`${imagePath}/${post.image}`}

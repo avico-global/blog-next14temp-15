@@ -309,7 +309,7 @@ export default function Navbar({
                           <Link
                           title={`${blog?.title} - ${blog?.article_category}`}
                             key={index}
-                            href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(blog.title)}`}
+                            href={`/${sanitizeUrl(blog.title)}`}
                             onClick={() => {
                               setIsSearchOpen(false);
                               setSearchQuery("");

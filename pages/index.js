@@ -99,9 +99,7 @@ export async function getServerSideProps({ req }) {
 
   const project_id = logo?.data[0]?.project_id || null;
   const about_me = await callBackendApi({ domain, type: "about_me" });
-  const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
-  const all_data = await callBackendApi({ domain, type: "" });
   const imagePath = await getImagePath(project_id, domain);
 
   let page = null;
@@ -125,11 +123,10 @@ export async function getServerSideProps({ req }) {
       logo: logo?.data[0] || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
-      copyright: copyright?.data[0]?.value || null,
       about_me: about_me?.data[0] || null,
-      banner: banner?.data[0],
-      all_data,
+      banner: banner?.data[0] || null,
       page,
     },
   };
 }
+
