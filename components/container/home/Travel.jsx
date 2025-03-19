@@ -34,7 +34,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                         alt={item.title}
                         height={1800}
                         width={1800}
-                        className="object-cover"
+                        className="object-cover w-full h-full aspect-[3/4]"
                       />
                     </div>
                   </div>
@@ -89,7 +89,7 @@ export default function Travel({ blog_list = [], imagePath }) {
                         alt={item.title}
                         height={1800}
                         width={1800}
-                        className="object-cover"
+                        className="object-cover w-full h-full aspect-[3/4]"
                       />
                     </Link>
                   </div>

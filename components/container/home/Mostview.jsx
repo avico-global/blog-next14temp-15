@@ -10,9 +10,10 @@ export default function Mostview({ blog_list, imagePath }) {
 
 
   return (
+    mustreadblog.length > 0 && (
     <div className="bg-white font-hanken text-2xl py-[90px]">
-      <h3 className="text-center pb-4 text-primary text-[18px] tracking-[3px] font-hanken leading-[24px]">
-        THE LATEST
+      <h3 className="text-center pb-4 text-primary text-[18px] tracking-[3px] uppercase font-hanken leading-[24px]">
+        THE Must read
       </h3>
       <h2 className="text-center  text-primary text-[68px] leading-[62px] font-ivyMedium ">
         FROM <span className="font-ivy">the</span> JOURNAL
@@ -47,5 +48,6 @@ export default function Mostview({ blog_list, imagePath }) {
         </div>
       </Container>
     </div>
+    )
   );
 }
