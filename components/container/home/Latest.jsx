@@ -58,6 +58,7 @@ export default function Latest({ blog_list = [], imagePath }) {
                 alt="latest"
                 width={500}
                 height={1000}
+                className="w-full h-auto aspect-[3/4] object-cover"
               />
             </div>
           </Link>
