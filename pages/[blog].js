@@ -43,7 +43,7 @@ export default function Blog({
         <meta name="description" content={meta?.description} />
         <link rel="author" href={`https://www.${domain}`} />
         <link rel="publisher" href={`https://www.${domain}`} />
-        <link rel="canonical" href={`https://www.${domain}`} />
+        <link rel="canonical" href={`https://www.${domain}/${sanitizeUrl(myblog?.value?.title)}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
