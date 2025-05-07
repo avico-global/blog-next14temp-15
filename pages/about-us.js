@@ -6,6 +6,8 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import Image from "next/image";
 import Container from "@/components/common/Container";
 import Fullcontainer from "@/components/common/Fullcontainer";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Head from "next/head";
 
 export default function About({
   logo,
@@ -14,12 +16,25 @@ export default function About({
   about_me,
   categories,
   domain,
- 
+  meta,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value || "");
   return (
     <div>
+      <Head>
+        <meta charSet="UTF-8" />
+        <title>{meta?.title}</title>
+        <meta name="description" content={meta?.description} />
+        <link rel="author" href={`https://${domain}`} />
+        <link rel="publisher" href={`https://${domain}`} />
+        <link rel="canonical" href={`https://${domain}/about`} />
+        <meta name="theme-color" content="#008DE5" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <GoogleTagManager />
+      </Head>
       <Navbar
         className="text-primary"
         categories={categories}
@@ -88,7 +103,7 @@ export async function getServerSideProps({ req }) {
     type: "layout",
   });
 
-  const meta = await callBackendApi({ domain, type: "meta_home" });
+  const meta = await callBackendApi({ domain, type: "meta_about" });
   const logo = await callBackendApi({ domain, type: "logo" });
   const favicon = await callBackendApi({ domain, type: "favicon" });
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
