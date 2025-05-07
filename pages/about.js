@@ -6,6 +6,8 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import Image from "next/image";
 import Container from "@/components/common/Container";
 import Fullcontainer from "@/components/common/Fullcontainer";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Head from "next/head";
 
 export default function About({
   logo,
