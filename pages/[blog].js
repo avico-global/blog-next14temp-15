@@ -84,9 +84,9 @@ export default function Blog({
       <Container className="mt-20 px-5 lg:max-w-3xl ">
         <div className="flex flex-col gap-6 py-10  justify-center items-center">
           <div className="flex flex-col gap-6  text-left  md:text-center py-10">
-            <h2 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
+            <h1 className="text-[19px] text-gray-900 leading-[25px]  font-thin font-hanken ">
               {myblog?.value?.title}
-            </h2>
+            </h1>
             <p className="font-ivyMedium  text-[40px] text-black leading-10 font-thin ">
               Celebrity Style Steals: Get the Look for Less
             </p>
