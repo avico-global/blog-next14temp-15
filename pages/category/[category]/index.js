@@ -46,11 +46,20 @@ export default function index({
     <>
       <Head>
         <meta charSet="UTF-8" />
-        <title>{meta?.title}</title>
+        <title>
+        {meta?.title?.replaceAll(
+              "##category##",
+              category
+                ?.replaceAll("-", " ")
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+            )}
+          </title>
         <meta name="description" content={meta?.description} />
         <link rel="author" href={`https://${domain}`} />
         <link rel="publisher" href={`https://${domain}`} />
-        <link rel="canonical" href={`https://www.${domain}/category/${category}`} />
+        <link rel="canonical" href={`https://${domain}/category/${category}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
