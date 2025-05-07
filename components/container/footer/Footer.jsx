@@ -16,7 +16,7 @@ export default function Footer({
   const pages = [
     { name: "Home", href: "/" },
     { name: "Contact", href: "/contact" },
-    { name: "About", href: "/about" },
+    { name: "About", href: "/about-us" },
     { name: "All Articles", href: "/allarticles" },
   ];
   const markdon = new MarkdownIt();

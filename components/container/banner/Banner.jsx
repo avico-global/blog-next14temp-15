@@ -23,9 +23,9 @@ export default function Banner({data , image}) {
 
       {/* Content */}
       <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h2 className="text-white md:text-[96px] text-5xl font-ivyMedium capitalize leading-10 md:leading-[75px]">
+        <h1 className="text-white md:text-[96px] text-5xl font-ivyMedium capitalize leading-10 md:leading-[75px]">
           {data?.title}
-        </h2>
+        </h1>
         <p className="text-white md:text-[45px] text-3xl leading-6 md:leading-[48px] pt-4  font-ivy ">
           {data?.tagline}
         </p>
