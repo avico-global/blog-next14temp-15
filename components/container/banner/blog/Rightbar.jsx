@@ -19,7 +19,7 @@ export default function Rightbar({ imagePath, categories, about_me }) {
   return (
     <div className=" sticky top-0 ">
       {/* about me */}
-      <Link title="About Us" href="/about" className="flex flex-col gap-4">
+      <Link title="About Us" href="/about-us" className="flex flex-col gap-4">
         <h2 className="text-2xl font-ivyMedium underline underline-offset-8 decoration-1 leading-[3rem] decoration-gray-500 font-medium w-full text-center capitalize">
           About us
         </h2>
