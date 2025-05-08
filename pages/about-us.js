@@ -18,6 +18,7 @@ export default function About({
   domain,
   meta,
 }) {
+
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value || "");
   return (
@@ -28,7 +29,7 @@ export default function About({
         <meta name="description" content={meta?.description} />
         <link rel="author" href={`https://${domain}`} />
         <link rel="publisher" href={`https://${domain}`} />
-        <link rel="canonical" href={`https://${domain}/about`} />
+        <link rel="canonical" href={`https://${domain}/about-us`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
