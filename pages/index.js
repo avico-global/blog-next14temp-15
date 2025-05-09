@@ -84,49 +84,79 @@ export default function Home({
 }
 
 export async function getServerSideProps({ req }) {
-  const domain = getDomain(req?.headers?.host);
+  try {
+    const domain = getDomain(req?.headers?.host);
+    if (!domain) {
+      return {
+        notFound: true,
+      };
+    }
 
-  let layoutPages = await callBackendApi({
-    domain,
-    type: "layout",
-  });
+    // Fetch all required data
+    const [layoutPages, meta, logo, favicon, blog_list, categories, about_me, banner] = await Promise.all([
+      callBackendApi({ domain, type: "layout" }),
+      callBackendApi({ domain, type: "meta_home" }),
+      callBackendApi({ domain, type: "logo" }),
+      callBackendApi({ domain, type: "favicon" }),
+      callBackendApi({ domain, type: "blog_list" }),
+      callBackendApi({ domain, type: "categories" }),
+      callBackendApi({ domain, type: "about_me" }),
+      callBackendApi({ domain, type: "banner" })
+    ]).catch(error => {
+      console.error('Error fetching data:', error);
+      return [null, null, null, null, null, null, null, null];
+    });
 
-  const meta = await callBackendApi({ domain, type: "meta_home" });
-  const logo = await callBackendApi({ domain, type: "logo" });
-  const favicon = await callBackendApi({ domain, type: "favicon" });
-  const blog_list = await callBackendApi({ domain, type: "blog_list" });
-  const categories = await callBackendApi({ domain, type: "categories" });
+    // Validate required data
+    if (!layoutPages?.data || !meta?.data || !logo?.data) {
+      console.error('Missing required data');
+      return {
+        notFound: true,
+      };
+    }
 
-  const project_id = logo?.data[0]?.project_id || null;
-  const about_me = await callBackendApi({ domain, type: "about_me" });
-  const banner = await callBackendApi({ domain, type: "banner" });
-  const imagePath = await getImagePath(project_id, domain);
+    const project_id = logo?.data[0]?.project_id || null;
+    const imagePath = await getImagePath(project_id, domain).catch(error => {
+      console.error('Error getting image path:', error);
+      return null;
+    });
 
-  let page = null;
-  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
-    const valueData = layoutPages.data[0].value;
-    page = valueData?.find((page) => page.page === "home");
-  }
+    if (!imagePath) {
+      return {
+        notFound: true,
+      };
+    }
 
-  if (!page?.enable) {
+    let page = null;
+    if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+      const valueData = layoutPages.data[0].value;
+      page = valueData?.find((page) => page.page === "home");
+    }
+
+    if (!page?.enable) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        domain,
+        imagePath,
+        meta: meta?.data[0]?.value || null,
+        favicon: favicon?.data[0]?.file_name || null,
+        logo: logo?.data[0] || null,
+        blog_list: blog_list?.data[0]?.value || [],
+        categories: categories?.data[0]?.value || null,
+        about_me: about_me?.data[0] || null,
+        banner: banner?.data[0] || null,
+        page,
+      },
+    };
+  } catch (error) {
+    console.error('Error in getServerSideProps:', error);
     return {
       notFound: true,
     };
   }
-
-  return {
-    props: {
-      domain,
-      imagePath,
-      meta: meta?.data[0]?.value || null,
-      favicon: favicon?.data[0]?.file_name || null,
-      logo: logo?.data[0] || null,
-      blog_list: blog_list?.data[0]?.value || [],
-      categories: categories?.data[0]?.value || null,
-      about_me: about_me?.data[0] || null,
-      banner: banner?.data[0] || null,
-      page,
-    },
-  };
 }
-
