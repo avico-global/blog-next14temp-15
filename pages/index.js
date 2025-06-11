@@ -116,10 +116,7 @@ export async function getServerSideProps({ req }) {
     }
 
     const project_id = logo?.data[0]?.project_id || null;
-    const imagePath = await getImagePath(project_id, domain).catch(error => {
-      console.error('Error getting image path:', error);
-      return null;
-    });
+    const imagePath = getImagePath(project_id, domain);
 
     if (!imagePath) {
       return {

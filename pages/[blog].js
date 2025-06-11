@@ -164,7 +164,7 @@ export async function getServerSideProps({ req, query }) {
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
 
   let project_id = logo?.data[0]?.project_id || null;
-  let imagePath = await getImagePath(project_id, domain);
+  let imagePath = getImagePath(project_id, domain);
 
   return {
     props: {

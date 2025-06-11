@@ -170,7 +170,7 @@ export async function getServerSideProps({ req }) {
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
-  imagePath = await getImagePath(project_id, domain);
+  imagePath = getImagePath(project_id, domain);
 
   return {
     props: {

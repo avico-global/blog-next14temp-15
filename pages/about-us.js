@@ -115,7 +115,7 @@ export async function getServerSideProps({ req }) {
   const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
   const all_data = await callBackendApi({ domain, type: "" });
-  const imagePath = await getImagePath(project_id, domain);
+  const imagePath = getImagePath(project_id, domain);
 
   let page = null;
   if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {

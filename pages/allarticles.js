@@ -176,12 +176,12 @@ export async function getServerSideProps({ req }) {
     const blog_list = await callBackendApi({ domain, type: "blog_list" });
     const categories = await callBackendApi({ domain, type: "categories" });
   
-    const project_id = logo?.data[0]?.project_id || null;
-    const about_me = await callBackendApi({ domain, type: "about_me" });
-    const copyright = await callBackendApi({ domain, type: "copyright" });
-    const banner = await callBackendApi({ domain, type: "banner" });
-    const all_data = await callBackendApi({ domain, type: "" });
-    const imagePath = await getImagePath(project_id, domain);
+      const project_id = logo?.data[0]?.project_id || null;
+  const about_me = await callBackendApi({ domain, type: "about_me" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const all_data = await callBackendApi({ domain, type: "" });
+  const imagePath = getImagePath(project_id, domain);
   
     let page = null;
     if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
